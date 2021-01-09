@@ -1,0 +1,26 @@
+{
+  "name": "sample-bot",
+  "version": "0.0.1",
+  "description": "Example discord bot by using discord.js",
+  "main": "myBot.js",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.3",
+    "axios": "^0.21.1",
+    "discord.js": "^12.5.1",
+    "ffmpeg-static": "^4.2.7",
+    "nodemon": "^2.0.6",
+    "opusscript": "0.0.7",
+    "ytdl-core": "^4.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "up2up"
+}
