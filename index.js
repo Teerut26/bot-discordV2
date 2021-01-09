@@ -62,8 +62,19 @@ client.on("message", async message => {
             // ':hash:\n' +
             '/twitter [now][1d][7d][30d][year]\n' +
             '/botv\n' +
+            '/netflix\n' +
             '/useronline\n'
         );
+
+    }else if (message.content.startsWith(`${prefix}netflix`)) {
+        axios.get('https://api-vue-sv1.herokuapp.com/netflix/top').then((res) => {
+            for (let index = 0; index < 7; index++) {
+                    // message.channel.send((index+1) + '. ' + res.data[index].title, {files: [res.data[index].image]});
+                    message.channel.send((index+1) + '. ' + res.data[index].title);
+            }
+        }).catch(function (error) {
+            console.log(error);
+        });
 
     } else if (message.content.startsWith(`${prefix}covid`)) {
         axios.get('https://covid19.th-stat.com/api/open/today').then((res) => {
@@ -120,7 +131,7 @@ client.on("message", async message => {
             console.log(error);
         });
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.1.1 // Last Update 09/01/2020');
+        message.reply('Bot version 1.1.2 // Last Update 09/01/2020');
     }else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
