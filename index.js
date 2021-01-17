@@ -113,6 +113,7 @@ client.on("message", async message => {
             '/twitter [now][1d][7d][30d][year]\n' +
             '/botv\n' +
             '/netflix\n' +
+            '/ig\n' +
             '/useronline\n'
         );
 
