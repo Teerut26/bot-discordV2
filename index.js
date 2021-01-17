@@ -97,9 +97,6 @@ client.on("message", async message => {
     } else if (message.content.startsWith(`${prefix}stop`)) {
         stop(message, serverQueue);
         return;
-    } else if (message.content.match(/(\/pldfgdgay) (.*)/g)) {
-        stop(message, serverQueue);
-        return;
     } else if (message.content.startsWith(`${prefix}help`)) {
         message.channel.send(
             'คำสั่ง\n' +
@@ -184,7 +181,7 @@ client.on("message", async message => {
             console.log(error);
         });
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.1.2 // Last Update 09/01/2020');
+        message.reply('Bot version 1.1.3 // Last Update 17/01/2020');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
