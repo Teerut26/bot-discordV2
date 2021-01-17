@@ -124,8 +124,8 @@ client.on("message", async message => {
     } else if (message.content.startsWith(`${prefix}netflix`)) {
         axios.get('https://api-vue-sv1.herokuapp.com/netflix/top').then((res) => {
             for (let index = 0; index < 7; index++) {
-                // message.channel.send((index+1) + '. ' + res.data[index].title, {files: [res.data[index].image]});
-                message.channel.send((index + 1) + '. ' + res.data[index].title);
+                message.channel.send((index+1) + '. ' + res.data[index].title, {files: [res.data[index].image]});
+                // message.channel.send((index + 1) + '. ' + res.data[index].title);
             }
         }).catch(function (error) {
             console.log(error);
@@ -186,7 +186,7 @@ client.on("message", async message => {
             console.log(error);
         });
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.1.4 // Last Update 17/01/2020');
+        message.reply('Bot version 1.1.5 // Last Update 18/01/2020');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
