@@ -11,8 +11,8 @@ const client = new Discord.Client();
 // const guild = new Discord.Guild();
 
 var queue = new Map();
-var modules_basic = require('./modules_basic')
-require('./modules_web')
+var modules_basic = require('./modules_basic.js')
+require('./modules_web.js')
 // const modules_player = require('./modules_player')
 
 // var obj_log = JSON.parse(log_json); 

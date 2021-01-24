@@ -1,2 +1,6 @@
 [21:48:32][23/1/2021][M. 5/3][bot-music][RTX2080Ti] "8"
 [21:48:33][23/1/2021][M. 5/3][bot-music][RTX2080Ti] "1"
+[20:23:52][24/1/2021][M. 5/3][free-chat][RTX2080Ti] "/help"
+[20:23:52][24/1/2021][M. 5/3][free-chat][SynthX] "คำสั่ง\n/play <YOUTUBE URL>\n/skip\n/stop\n/google <ISO-3166-code> <word>\n/google <word>\n/covid\n/twitter [now][1d][7d][30d][year]\n/botv\n/musiclist\n/useronline"
+[20:24:43][24/1/2021][M. 5/3][free-chat][RTX2080Ti] "/play https://www.youtube.com/watch?v=fHI8X4OXluQ"
+[20:24:47][24/1/2021][M. 5/3][free-chat][SynthX] "กำลังเริ่มเล่น!: **The Weeknd - Blinding Lights (Official Audio)**\nUploadDate: **2019-11-28**\nViewCount: **407.3M**\nLikes: **3.7M**\nDislikes: **73.1k**\nAuthor: **TheWeekndVEVO**"
