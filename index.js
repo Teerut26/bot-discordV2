@@ -5,61 +5,24 @@ const {
 } = require("./config.json");
 const ytdl = require("ytdl-core");
 const axios = require('axios');
+
 var fs = require("fs");
-
 const client = new Discord.Client();
+// const guild = new Discord.Guild();
 
-const queue = new Map();
+var queue = new Map();
+var modules_basic = require('./modules_basic')
+require('./modules_web')
+// const modules_player = require('./modules_player')
 
-function commaSeparateNumber(val) {
+// var obj_log = JSON.parse(log_json); 
+// var txt = log_json
+// var obj = JSON.parse(txt);
+// console.log(obj);
 
-    var val2 = parseInt(val)
-    while (/(\d+)(\d{3})/.test(val2.toString())) {
-        val2 = val2.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
-    }
-    return val2;
-
-}
-
-function nFormatter(num, digits) {
-    var si = [{
-            value: 1,
-            symbol: ""
-        },
-        {
-            value: 1E3,
-            symbol: "k"
-        },
-        {
-            value: 1E6,
-            symbol: "M"
-        },
-        {
-            value: 1E9,
-            symbol: "B"
-        },
-        {
-            value: 1E12,
-            symbol: "T"
-        },
-        {
-            value: 1E15,
-            symbol: "P"
-        },
-        {
-            value: 1E18,
-            symbol: "E"
-        }
-    ];
-    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var i;
-    for (i = si.length - 1; i > 0; i--) {
-        if (num >= si[i].value) {
-            break;
-        }
-    }
-    return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
-}
+fs.readFile('./log.json', function(err, data) {
+    console.log(data);
+  });
 
 async function getVideoLink(keyWord) {
     if (keyWord.match(/ht.*?\/\//g)) {
@@ -70,9 +33,37 @@ async function getVideoLink(keyWord) {
     }
 }
 
-client.once("ready", () => {
+// console.log(client.uptime);
+
+
+
+client.on("ready", () => {
     console.log("Ready!");
+
+
+
+
+
+    type_bot = ['WATCHING', 'PLAYING', 'LISTENING']
+    text_activity = ['Porn Hub', 'PUBG', 'Spotify']
+    client.user.setActivity('SynthX | /help', {
+        type: 'LISTENING'
+    })
+    // i = 0
+    // setInterval(() => {
+    //     client.user.setActivity(text_activity[i], {
+    //         type: type_bot[i]
+    //     })
+    //     // console.log('Bot Status : '+type_bot[i])
+    //     if (i == 2) {
+    //         i = 0
+    //     } else {
+    //         i++
+    //     }
+    // }, 1000 * 60 * 60)
 });
+
+
 
 client.once("reconnecting", () => {
     console.log("Reconnecting!");
@@ -83,6 +74,54 @@ client.once("disconnect", () => {
 });
 
 client.on("message", async message => {
+    // jsonLog.push(message.content)
+    // console.log(jsonLog);
+
+//     let default_time = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"});
+//     let now = new Date(default_time)
+//     let now2 = Date.now();
+//     cotent_text = `{
+//     "time":"${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}",
+//     "time_unix":${now2},
+//     "server_name":"${message.guild.name}",
+//     "server_id":${message.guild.id},
+//     "channel_name":"${message.channel.name}",
+//     "channel_id":${message.channel.id},
+//     "author_username":"${message.author.username}",
+//     "author_id":${message.author.id},
+//     "content":"${message.content}"
+// },\n`
+//     await fs.appendFile('log.txt', cotent_text, function (err) {
+//         if (err) throw err;
+//         console.log('Saved!');
+//     });
+
+    //[${message.guild.name}][${message.channel.name}][${message.author.username}] ${JSON.stringify(message.content)}\n`, function (err) {
+    // message.guild.fetchAuditLogs()
+    //   .then(audit => console.log(audit.entries.first()))
+    //   .catch(console.error);
+    // var widget_enabled;
+    // await message.guild.fetchWidget().then(function (widget) {
+    //         widget_enabled = widget.enabled
+    //     })
+    //     .catch(console.error);
+
+    // console.log(widget_enabled)
+
+    // await message.guild.edit({
+    //     name: message.content,
+    //   })
+    //     .then(updated => console.log(`New guild name ${updated} in region`))
+    //     .catch(console.error);
+    // await console.log(queue.get(message.guild.id))
+    let default_time = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"});
+    let now = new Date(default_time)
+
+    await fs.appendFile('log.txt', `[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}][${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}][${message.guild.name}][${message.channel.name}][${message.author.username}] ${JSON.stringify(message.content)}\n`, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
+
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
 
@@ -97,10 +136,10 @@ client.on("message", async message => {
     } else if (message.content.startsWith(`${prefix}stop`)) {
         stop(message, serverQueue);
         return;
-    }else if (message.content.startsWith(`${prefix}musiclist`)) {
+    } else if (message.content.startsWith(`${prefix}musiclist`)) {
         getMusicList(message)
         return;
-    }else if (message.content.startsWith(`${prefix}help`)) {
+    } else if (message.content.startsWith(`${prefix}help`)) {
         message.channel.send(
             'คำสั่ง\n' +
             // ':musical_note:\n' +
@@ -115,78 +154,58 @@ client.on("message", async message => {
             // ':hash:\n' +
             '/twitter [now][1d][7d][30d][year]\n' +
             '/botv\n' +
-            '/netflix\n' +
-            '/ig\n' +
             '/musiclist\n' +
             '/useronline\n'
         );
 
-    } else if (message.content.startsWith(`${prefix}netflix`)) {
-        axios.get('https://api-vue-sv1.herokuapp.com/netflix/top').then((res) => {
-            for (let index = 0; index < 7; index++) {
-                message.channel.send((index+1) + '. ' + res.data[index].title, {files: [res.data[index].image]});
-                // message.channel.send((index + 1) + '. ' + res.data[index].title);
-            }
-        }).catch(function (error) {
-            console.log(error);
-        });
-
     } else if (message.content.startsWith(`${prefix}covid`)) {
         axios.get('https://covid19.th-stat.com/api/open/today').then((res) => {
             message.channel.send(
-                'Confirmed : ' + commaSeparateNumber(res.data.Confirmed) + '\n' +
-                'Recovered : ' + commaSeparateNumber(res.data.Recovered) + '\n' +
-                'Hospitalized : ' + commaSeparateNumber(res.data.Hospitalized) + '\n' +
-                'Deaths : ' + commaSeparateNumber(res.data.Deaths) + '\n' +
-                'NewConfirmed : ' + commaSeparateNumber(res.data.NewConfirmed) + '\n' +
-                'NewRecovered : ' + commaSeparateNumber(res.data.NewRecovered) + '\n' +
-                'NewHospitalized : ' + commaSeparateNumber(res.data.NewHospitalized) + '\n' +
-                'NewDeaths : ' + commaSeparateNumber(res.data.NewDeaths) + '\n' +
+                'Confirmed : ' + modules_basic.commaSeparateNumber(res.data.Confirmed) + '\n' +
+                'Recovered : ' + modules_basic.commaSeparateNumber(res.data.Recovered) + '\n' +
+                'Hospitalized : ' + modules_basic.commaSeparateNumber(res.data.Hospitalized) + '\n' +
+                'Deaths : ' + modules_basic.commaSeparateNumber(res.data.Deaths) + '\n' +
+                'NewConfirmed : ' + modules_basic.commaSeparateNumber(res.data.NewConfirmed) + '\n' +
+                'NewRecovered : ' + modules_basic.commaSeparateNumber(res.data.NewRecovered) + '\n' +
+                'NewHospitalized : ' + modules_basic.commaSeparateNumber(res.data.NewHospitalized) + '\n' +
+                'NewDeaths : ' + modules_basic.commaSeparateNumber(res.data.NewDeaths) + '\n' +
                 'UpdateDate : ' + res.data.UpdateDate + '\n'
             );
         }).catch(function (error) {
             console.log(error);
         });
     } else if (message.content.startsWith(`${prefix}useronline`)) {
-        axios.get('https://discord.com/api/guilds/574794024712405003/widget.json').then((res) => {
-            var indexloop = 0;
-            var botCount = 0;
-            for (let index = 0; index < res.data.members.length; index++) {
-                if (res.data.members[index].username != 'Bot เปิดเพลง') {
-                    indexloop++
-                    message.channel.send(indexloop + '. ' + res.data.members[index].username + ' : ' + res.data.members[index].status);
-                } else {
-                    botCount++
-                }
+        var widget_enabled;
+        await message.guild.fetchWidget().then(function (widget) {
+                widget_enabled = widget.enabled
+            })
+            .catch(console.error);
+        if (widget_enabled) {
+            axios.get('https://discord.com/api/guilds/' + message.guild.id + '/widget.json').then((res) => {
+                // var indexloop = 0;
+                // var botCount = 0;
+                for (let index = 0; index < res.data.members.length; index++) {
+                    message.channel.send((index + 1) + '. ' + res.data.members[index].username + ' : ' + res.data.members[index].status);
+                    // if (res.data.members[index].username != 'Bot เปิดเพลง') {
+                    //     indexloop++
+                    //     message.channel.send(indexloop + '. ' + res.data.members[index].username + ' : ' + res.data.members[index].status);
+                    // } else {
+                    //     botCount++
+                    // }
 
-            }
-            var userSum = res.data.presence_count - botCount;
-            message.channel.send("------------------------------------------");
-            message.channel.send("Online : " + userSum);
-        }).catch(function (error) {
-            console.log(error);
-        });
-    } else if (message.content.startsWith(`${prefix}useronline`)) {
-        axios.get('https://discord.com/api/guilds/574794024712405003/widget.json').then((res) => {
-            var indexloop = 0;
-            var botCount = 0;
-            for (let index = 0; index < res.data.members.length; index++) {
-                if (res.data.members[index].username != 'Bot เปิดเพลง') {
-                    indexloop++
-                    message.channel.send(indexloop + '. ' + res.data.members[index].username + ' : ' + res.data.members[index].status);
-                } else {
-                    botCount++
                 }
+                // var userSum = res.data.presence_count - botCount;
+                message.channel.send("------------------------------------------");
+                // message.channel.send("Online : " + userSum);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        } else {
+            message.channel.send('ต้องเปิด widget ของ server นี้ก่อน')
+        }
 
-            }
-            var userSum = res.data.presence_count - botCount;
-            message.channel.send("------------------------------------------");
-            message.channel.send("Online : " + userSum);
-        }).catch(function (error) {
-            console.log(error);
-        });
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.1.5 // Last Update 18/01/2020');
+        message.reply('Bot version 1.1.6 // Last Update 23/01/2021');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
@@ -214,84 +233,6 @@ client.on("message", async message => {
                 message.reply('ต้องมีคนอยู่ในห้องก่อน');
             }
         }
-    } else if (message.content.match(/(\/ig) (.*)/g)) {
-
-        function getProfile(user) {
-            fs.readFile("cookieIG.txt", (err, data) => {
-                if (err) return console.error(err);
-                cookieIG = data.toString()
-            });
-            var config = {
-                method: 'get',
-                url: 'https://www.instagram.com/' + user + '/?__a=1',
-                headers: {
-                    'authority': 'www.instagram.com',
-                    'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
-                    'accept': '*/*',
-                    'x-ig-www-claim': 'hmac.AR1dA7uiCCCDZ37UuOqNcrJ4cUxG7OqBkCe1-Y1nFc147-cn',
-                    'x-requested-with': 'XMLHttpRequest',
-                    'sec-ch-ua-mobile': '?0',
-                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
-                    'x-ig-app-id': '936619743392459',
-                    'sec-fetch-site': 'same-origin',
-                    'sec-fetch-mode': 'cors',
-                    'sec-fetch-dest': 'empty',
-                    'referer': 'https://www.instagram.com/lalalalisa_m/',
-                    'accept-language': 'th-TH,th;q=0.9,en;q=0.8',
-                    'cookie': cookieIG
-                }
-            };
-            axios(config)
-                .then(function (response) {
-                    message.channel.send(user + " // " + nFormatter(response.data.graphql.user.edge_followed_by.count, 1), {
-                        files: [response.data.graphql.user.profile_pic_url]
-                    })
-                    console.log(user + " // " + nFormatter(response.data.graphql.user.edge_followed_by.count, 1));
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-        let re = /(\/ig) (.*)/g
-        let command = message.content.replace(re, '$1')
-        let content = message.content.replace(re, '$2')
-        var cookieIG = ""
-        fs.readFile("cookieIG.txt", (err, data) => {
-            if (err) return console.error(err);
-            cookieIG = data.toString()
-        });
-        var config = {
-            method: 'get',
-            url: 'https://www.instagram.com/web/search/topsearch/?context=blended&query=' + encodeURIComponent(content) + '&rank_token=0.5264008246075622&include_reel=true',
-            headers: {
-                'authority': 'www.instagram.com',
-                'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
-                'accept': '*/*',
-                'x-ig-www-claim': 'hmac.AR1dA7uiCCCDZ37UuOqNcrJ4cUxG7OqBkCe1-Y1nFc147-cn',
-                'x-requested-with': 'XMLHttpRequest',
-                'sec-ch-ua-mobile': '?0',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
-                'x-ig-app-id': '936619743392459',
-                'sec-fetch-site': 'same-origin',
-                'sec-fetch-mode': 'cors',
-                'sec-fetch-dest': 'empty',
-                'referer': 'https://www.instagram.com/teerut_1t/',
-                'accept-language': 'th-TH,th;q=0.9,en;q=0.8',
-                'cookie': cookieIG
-            }
-        };
-        axios(config).then((res) => {
-            for (let index = 0; index < 5; index++) {
-                getProfile(res.data.users[index].user.username)
-                // console.log(res.data.users[index].user.username);
-                // message.channel.send(res.data.users[index].user.username + " : " + res.data.users[index].user.pk, {
-                //     files: [res.data.users[index].user.profile_pic_url]
-                // })
-            }
-            // console.log(res.data.users)
-        }).catch(function (error) {
-            console.log(error);
-        });
     } else if (message.content.match(/(\/twitter) (.*)/g)) {
         let re = /(\/twitter) (.*)/g
         let content = message.content.replace(re, '$2')
@@ -355,13 +296,13 @@ client.on("message", async message => {
 });
 var musicList = []
 
-function getMusicList(message){
+function getMusicList(message) {
     if (musicList[0]) {
         for (let index = 0; index < musicList.length; index++) {
             if (index == 0) {
-                message.channel.send("**NowPlaying : **"+musicList[index].title);
-            }else{
-                message.channel.send("**NextPlay_"+index+" : **"+musicList[index].title);
+                message.channel.send("**NowPlaying : **" + musicList[index].title);
+            } else {
+                message.channel.send("**NextPlay_" + index + " : **" + musicList[index].title);
                 // if (index==1) {
                 //     message.channel.send("**NextPlaying_"+index+" : **"+musicList[index].title);
                 // }else{
@@ -369,11 +310,11 @@ function getMusicList(message){
                 // }
             }
         }
-    }else{
+    } else {
         message.channel.send('ยังไม่มีเพลง')
     }
-    
-    
+
+
 }
 
 async function execute(message, serverQueue) {
@@ -382,7 +323,7 @@ async function execute(message, serverQueue) {
     let re = /(\/play) (.*)/g
     let content = message.content.replace(re, '$2')
 
-    console.log(content);
+    // console.log(content);
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
         return message.channel.send(
@@ -412,9 +353,9 @@ async function execute(message, serverQueue) {
     const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
-        viewCount: nFormatter(songInfo.videoDetails.viewCount, 1),
-        likes: nFormatter(songInfo.videoDetails.likes, 1),
-        dislikes: nFormatter(songInfo.videoDetails.dislikes, 1),
+        viewCount: modules_basic.nFormatter(songInfo.videoDetails.viewCount, 1),
+        likes: modules_basic.nFormatter(songInfo.videoDetails.likes, 1),
+        dislikes: modules_basic.nFormatter(songInfo.videoDetails.dislikes, 1),
         url_thumbnails: songInfo.videoDetails.thumbnails[4].url,
         author: songInfo.videoDetails.author.name,
         uploadDate: songInfo.videoDetails.uploadDate
@@ -482,7 +423,7 @@ function play(guild, song) {
         musicList.shift();
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
-        
+
         return;
     }
     if (musicList[1]) {
@@ -493,16 +434,18 @@ function play(guild, song) {
     //         musicList.slice(index-1);
     //     }
     // }
-    
+
     const dispatcher = serverQueue.connection
-        .play(ytdl(song.url, { filter: 'audioonly' }))
+        .play(ytdl(song.url, {
+            filter: 'audioonly'
+        }))
         .on("finish", () => {
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0]);
         })
         .on("error", error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    
+
     serverQueue.textChannel.send(`
             กำลังเริ่มเล่น!: **${song.title}**\nUploadDate: **${song.uploadDate}**\nViewCount: **${song.viewCount}**\nLikes: **${song.likes}**\nDislikes: **${song.dislikes}**\nAuthor: **${song.author}**
     
