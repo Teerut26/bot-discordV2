@@ -21,9 +21,9 @@ require('./modules_web.js')
 // var obj = JSON.parse(txt);
 // console.log(obj);
 
-fs.readFile('./log.json', function (err, data) {
-    console.log(data);
-});
+// fs.readFile('./log.json', function (err, data) {
+//     console.log(data);
+// });
 
 async function getVideoLink(keyWord) {
     if (keyWord.match(/ht.*?\/\//g)) {
@@ -73,6 +73,8 @@ client.once("reconnecting", () => {
 client.once("disconnect", () => {
     console.log("Disconnect!");
 });
+
+var musicList = []
 
 client.on("message", async message => {
     // jsonLog.push(message.content)
@@ -140,8 +142,7 @@ client.on("message", async message => {
         stop(message, serverQueue);
         return;
     } else if (message.content.startsWith(`${prefix}musiclist`)) {
-        getMusicList(message)
-        return;
+        message.channel.send(modules_embeds.embeds_music_list(musicList))
     } else if (message.content.startsWith(`${prefix}help`)) {
         message.channel.send(
             'คำสั่ง\n' +
@@ -241,55 +242,14 @@ client.on("message", async message => {
         let re = /(\/twitter) (.*)/g
         let content = message.content.replace(re, '$2')
         axios.get('https://api-vue-sv1.herokuapp.com/twitter/trending/thailand/' + content).then((res) => {
-            message.channel.send(
-                "1. " + res.data[0].hastag + ' / ' + res.data[0].tweets + ' / ' + res.data[0].record + "\n" +
-                "2. " + res.data[1].hastag + ' / ' + res.data[1].tweets + ' / ' + res.data[1].record + "\n" +
-                "3. " + res.data[2].hastag + ' / ' + res.data[2].tweets + ' / ' + res.data[2].record + "\n" +
-                "4. " + res.data[3].hastag + ' / ' + res.data[3].tweets + ' / ' + res.data[3].record + "\n" +
-                "5. " + res.data[4].hastag + ' / ' + res.data[4].tweets + ' / ' + res.data[4].record + "\n" +
-                "6. " + res.data[5].hastag + ' / ' + res.data[5].tweets + ' / ' + res.data[5].record + "\n" +
-                "7. " + res.data[6].hastag + ' / ' + res.data[6].tweets + ' / ' + res.data[6].record + "\n" +
-                "8. " + res.data[7].hastag + ' / ' + res.data[7].tweets + ' / ' + res.data[7].record + "\n" +
-                "9. " + res.data[8].hastag + ' / ' + res.data[8].tweets + ' / ' + res.data[8].record + "\n" +
-                "10. " + res.data[9].hastag + ' / ' + res.data[9].tweets + ' / ' + res.data[9].record + "\n"
-            )
+            message.channel.send(modules_embeds.embeds_twitter(res.data))
         }).catch(function (error) {
 
             console.log(error);
         });
     } else if (message.content.match(/(\/twitter)/g)) {
         axios.get('https://api-vue-sv1.herokuapp.com/twitter/trending/thailand/1d').then((res) => {
-            message.channel.send(
-                "1. " + res.data[0].hastag + ' / ' + res.data[0].tweets + ' / ' + res.data[0].record + "\n" +
-                "2. " + res.data[1].hastag + ' / ' + res.data[1].tweets + ' / ' + res.data[1].record + "\n" +
-                "3. " + res.data[2].hastag + ' / ' + res.data[2].tweets + ' / ' + res.data[2].record + "\n" +
-                "4. " + res.data[3].hastag + ' / ' + res.data[3].tweets + ' / ' + res.data[3].record + "\n" +
-                "5. " + res.data[4].hastag + ' / ' + res.data[4].tweets + ' / ' + res.data[4].record + "\n" +
-                "6. " + res.data[5].hastag + ' / ' + res.data[5].tweets + ' / ' + res.data[5].record + "\n" +
-                "7. " + res.data[6].hastag + ' / ' + res.data[6].tweets + ' / ' + res.data[6].record + "\n" +
-                "8. " + res.data[7].hastag + ' / ' + res.data[7].tweets + ' / ' + res.data[7].record + "\n" +
-                "9. " + res.data[8].hastag + ' / ' + res.data[8].tweets + ' / ' + res.data[8].record + "\n" +
-                "10. " + res.data[9].hastag + ' / ' + res.data[9].tweets + ' / ' + res.data[9].record + "\n"
-            )
-        }).catch(function (error) {
-
-            console.log(error);
-        });
-    } else if (message.content.match(/(\/youtube) (.*)/g)) {
-        let re = /(\/youtube) (.*)/g
-        let content = message.content.replace(re, '$2')
-        var config = {
-            method: 'get',
-            url: 'https://classroom.googleapis.com/v1/courses/' + content + '/courseWork?courseWorkStates=PUBLISHED',
-            headers: {
-                'Authorization': 'Bearer ya29.a0AfH6SMBfqMnu56LOme1c9Tqv-EWf2FZN45eVdhyldp-y2Vmurs6UnKXhQaTQ854JEkgzTJOZb5VX-4ac1fxpRNB7bbtgJlwF-Rjon6MMmxvQVFRvd79u7W7lawIUk1eI_v68uRRj1BzxI25UpEZNFKIVi_XkUN7kd-XMtxJ5Omw',
-                'Accept': 'application/json'
-            }
-        };
-        axios(config).then((res) => {
-            for (let index = 0; index < res.data.courseWork.length; index++) {
-                message.channel.send(res.data.courseWork[index].title)
-            }
+            message.channel.send(modules_embeds.embeds_twitter(res.data))
         }).catch(function (error) {
 
             console.log(error);
@@ -298,25 +258,25 @@ client.on("message", async message => {
         message.channel.send("คุณต้องป้อนคำสั่งที่ถูกต้อง!");
     }
 });
-var musicList = []
+
 
 function getMusicList(message) {
-    if (musicList[0]) {
-        for (let index = 0; index < musicList.length; index++) {
-            if (index == 0) {
-                message.channel.send("**NowPlaying : **" + musicList[index].title);
-            } else {
-                message.channel.send("**NextPlay_" + index + " : **" + musicList[index].title);
-                // if (index==1) {
-                //     message.channel.send("**NextPlaying_"+index+" : **"+musicList[index].title);
-                // }else{
-                //     message.channel.send("**NextPlaying_"+index+" : **"+musicList[index].title);
-                // }
-            }
-        }
-    } else {
-        message.channel.send('ยังไม่มีเพลง')
-    }
+    // if (musicList[0]) {
+    //     for (let index = 0; index < musicList.length; index++) {
+    //         if (index == 0) {
+    //             message.channel.send("**NowPlaying : **" + musicList[index].title);
+    //         } else {
+    //             message.channel.send("**NextPlay_" + index + " : **" + musicList[index].title);
+    //             // if (index==1) {
+    //             //     message.channel.send("**NextPlaying_"+index+" : **"+musicList[index].title);
+    //             // }else{
+    //             //     message.channel.send("**NextPlaying_"+index+" : **"+musicList[index].title);
+    //             // }
+    //         }
+    //     }
+    // } else {
+    //     message.channel.send('ยังไม่มีเพลง')
+    // }
 
 
 }
@@ -365,7 +325,8 @@ async function execute(message, serverQueue) {
         author: songInfo.videoDetails.author.name,
         uploadDate: songInfo.videoDetails.uploadDate,
         type:"",
-        author_play:message.author.username
+        author_play:message.author.username,
+        author_profile_url:message.author.avatarURL('webp',true,64)
     };
 
     if (!serverQueue) {
