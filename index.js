@@ -259,28 +259,6 @@ client.on("message", async message => {
     }
 });
 
-
-function getMusicList(message) {
-    // if (musicList[0]) {
-    //     for (let index = 0; index < musicList.length; index++) {
-    //         if (index == 0) {
-    //             message.channel.send("**NowPlaying : **" + musicList[index].title);
-    //         } else {
-    //             message.channel.send("**NextPlay_" + index + " : **" + musicList[index].title);
-    //             // if (index==1) {
-    //             //     message.channel.send("**NextPlaying_"+index+" : **"+musicList[index].title);
-    //             // }else{
-    //             //     message.channel.send("**NextPlaying_"+index+" : **"+musicList[index].title);
-    //             // }
-    //         }
-    //     }
-    // } else {
-    //     message.channel.send('ยังไม่มีเพลง')
-    // }
-
-
-}
-
 async function execute(message, serverQueue) {
     // const args = message.content.split(" ");
     // message.content.match(/(\/play) (.*)/g)
@@ -384,7 +362,7 @@ function stop(message, serverQueue) {
 
     serverQueue.songs = [];
     musicList = []
-    modules_web.modules_list_music_clear(message.guild.id);
+    modules_web.modules_list_music_clear();
     serverQueue.connection.dispatcher.end();
 }
 
