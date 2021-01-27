@@ -8,10 +8,11 @@ const axios = require('axios');
 
 var fs = require("fs");
 const client = new Discord.Client();
-// const guild = new Discord.Guild();
 
 var queue = new Map();
 var modules_basic = require('./modules_basic.js')
+var modules_embeds = require('./modules_embeds.js')
+var modules_web = require('./modules_web.js')
 require('./modules_web.js')
 // const modules_player = require('./modules_player')
 
@@ -20,9 +21,9 @@ require('./modules_web.js')
 // var obj = JSON.parse(txt);
 // console.log(obj);
 
-fs.readFile('./log.json', function(err, data) {
+fs.readFile('./log.json', function (err, data) {
     console.log(data);
-  });
+});
 
 async function getVideoLink(keyWord) {
     if (keyWord.match(/ht.*?\/\//g)) {
@@ -77,24 +78,24 @@ client.on("message", async message => {
     // jsonLog.push(message.content)
     // console.log(jsonLog);
 
-//     let default_time = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"});
-//     let now = new Date(default_time)
-//     let now2 = Date.now();
-//     cotent_text = `{
-//     "time":"${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}",
-//     "time_unix":${now2},
-//     "server_name":"${message.guild.name}",
-//     "server_id":${message.guild.id},
-//     "channel_name":"${message.channel.name}",
-//     "channel_id":${message.channel.id},
-//     "author_username":"${message.author.username}",
-//     "author_id":${message.author.id},
-//     "content":"${message.content}"
-// },\n`
-//     await fs.appendFile('log.txt', cotent_text, function (err) {
-//         if (err) throw err;
-//         console.log('Saved!');
-//     });
+    //     let default_time = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"});
+    //     let now = new Date(default_time)
+    //     let now2 = Date.now();
+    //     cotent_text = `{
+    //     "time":"${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}",
+    //     "time_unix":${now2},
+    //     "server_name":"${message.guild.name}",
+    //     "server_id":${message.guild.id},
+    //     "channel_name":"${message.channel.name}",
+    //     "channel_id":${message.channel.id},
+    //     "author_username":"${message.author.username}",
+    //     "author_id":${message.author.id},
+    //     "content":"${message.content}"
+    // },\n`
+    //     await fs.appendFile('log.txt', cotent_text, function (err) {
+    //         if (err) throw err;
+    //         console.log('Saved!');
+    //     });
 
     //[${message.guild.name}][${message.channel.name}][${message.author.username}] ${JSON.stringify(message.content)}\n`, function (err) {
     // message.guild.fetchAuditLogs()
@@ -114,13 +115,15 @@ client.on("message", async message => {
     //     .then(updated => console.log(`New guild name ${updated} in region`))
     //     .catch(console.error);
     // await console.log(queue.get(message.guild.id))
-    let default_time = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"});
+    let default_time = new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Bangkok"
+    });
     let now = new Date(default_time)
 
     await fs.appendFile('log.txt', `[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}][${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}][${message.guild.name}][${message.channel.name}][${message.author.username}] ${JSON.stringify(message.content)}\n`, function (err) {
         if (err) throw err;
         console.log('Saved!');
-      });
+    });
 
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
@@ -160,17 +163,18 @@ client.on("message", async message => {
 
     } else if (message.content.startsWith(`${prefix}covid`)) {
         axios.get('https://covid19.th-stat.com/api/open/today').then((res) => {
-            message.channel.send(
-                'Confirmed : ' + modules_basic.commaSeparateNumber(res.data.Confirmed) + '\n' +
-                'Recovered : ' + modules_basic.commaSeparateNumber(res.data.Recovered) + '\n' +
-                'Hospitalized : ' + modules_basic.commaSeparateNumber(res.data.Hospitalized) + '\n' +
-                'Deaths : ' + modules_basic.commaSeparateNumber(res.data.Deaths) + '\n' +
-                'NewConfirmed : ' + modules_basic.commaSeparateNumber(res.data.NewConfirmed) + '\n' +
-                'NewRecovered : ' + modules_basic.commaSeparateNumber(res.data.NewRecovered) + '\n' +
-                'NewHospitalized : ' + modules_basic.commaSeparateNumber(res.data.NewHospitalized) + '\n' +
-                'NewDeaths : ' + modules_basic.commaSeparateNumber(res.data.NewDeaths) + '\n' +
-                'UpdateDate : ' + res.data.UpdateDate + '\n'
-            );
+            message.channel.send(modules_embeds.embeds_covid(res.data));
+            // message.channel.send(
+            //     'Confirmed : ' + modules_basic.commaSeparateNumber(res.data.Confirmed) + '\n' +
+            //     'Recovered : ' + modules_basic.commaSeparateNumber(res.data.Recovered) + '\n' +
+            //     'Hospitalized : ' + modules_basic.commaSeparateNumber(res.data.Hospitalized) + '\n' +
+            //     'Deaths : ' + modules_basic.commaSeparateNumber(res.data.Deaths) + '\n' +
+            //     'NewConfirmed : ' + modules_basic.commaSeparateNumber(res.data.NewConfirmed) + '\n' +
+            //     'NewRecovered : ' + modules_basic.commaSeparateNumber(res.data.NewRecovered) + '\n' +
+            //     'NewHospitalized : ' + modules_basic.commaSeparateNumber(res.data.NewHospitalized) + '\n' +
+            //     'NewDeaths : ' + modules_basic.commaSeparateNumber(res.data.NewDeaths) + '\n' +
+            //     'UpdateDate : ' + res.data.UpdateDate + '\n'
+            // );
         }).catch(function (error) {
             console.log(error);
         });
@@ -205,7 +209,7 @@ client.on("message", async message => {
         }
 
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.1.6 // Last Update 23/01/2021');
+        message.reply('Bot version 1.1.7 // Last Update 27/01/2021');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
@@ -350,15 +354,18 @@ async function execute(message, serverQueue) {
     //         if (err) throw err;
     //         console.log('Its saved!');
     //         });
+
     const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
         viewCount: modules_basic.nFormatter(songInfo.videoDetails.viewCount, 1),
         likes: modules_basic.nFormatter(songInfo.videoDetails.likes, 1),
         dislikes: modules_basic.nFormatter(songInfo.videoDetails.dislikes, 1),
-        url_thumbnails: songInfo.videoDetails.thumbnails[4].url,
+        url_thumbnails: songInfo.videoDetails.thumbnails[songInfo.videoDetails.thumbnails.length - 1].url,
         author: songInfo.videoDetails.author.name,
-        uploadDate: songInfo.videoDetails.uploadDate
+        uploadDate: songInfo.videoDetails.uploadDate,
+        type:"",
+        author_play:message.author.username
     };
 
     if (!serverQueue) {
@@ -375,6 +382,7 @@ async function execute(message, serverQueue) {
 
         queueContruct.songs.push(song);
         musicList.push(song)
+        modules_web.modules_list_music_push(song,message.guild.id)
 
 
         try {
@@ -389,6 +397,7 @@ async function execute(message, serverQueue) {
     } else {
         serverQueue.songs.push(song);
         musicList.push(song)
+        modules_web.modules_list_music_push(song,message.guild.id)
         return message.channel.send(`**${song.title}** เพิ่มลงในคิวการเล่นแล้ว!`);
     }
 }
@@ -414,6 +423,7 @@ function stop(message, serverQueue) {
 
     serverQueue.songs = [];
     musicList = []
+    modules_web.modules_list_music_clear(message.guild.id);
     serverQueue.connection.dispatcher.end();
 }
 
@@ -421,12 +431,14 @@ function play(guild, song) {
     const serverQueue = queue.get(guild.id);
     if (!song) {
         musicList.shift();
+        modules_web.modules_list_music_clear();
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
 
         return;
     }
     if (musicList[1]) {
+        modules_web.modules_list_music_shift();
         musicList.shift();
     }
     // for (let index = 0; index < musicList.length; index++) {
@@ -445,14 +457,20 @@ function play(guild, song) {
         })
         .on("error", error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    serverQueue.textChannel.send(modules_embeds.embeds_play_v2({
+        song_Title: song.title,
+        song_uploadDate: song.uploadDate,
+        song_view_count: song.viewCount,
+        song_likes: song.likes,
+        song_disklike: song.dislikes,
+        song_author: song.author,
+        url_thumbnails: song.url_thumbnails
+    }))
 
-    serverQueue.textChannel.send(`
-            กำลังเริ่มเล่น!: **${song.title}**\nUploadDate: **${song.uploadDate}**\nViewCount: **${song.viewCount}**\nLikes: **${song.likes}**\nDislikes: **${song.dislikes}**\nAuthor: **${song.author}**
-    
-            `, {
-        files: [song.url_thumbnails]
-    });
-    // message.channel.send({files: [song.url_thumbnails]});
+
+
+
+
 }
 
 client.login(token);
