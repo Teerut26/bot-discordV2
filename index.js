@@ -144,23 +144,24 @@ client.on("message", async message => {
     } else if (message.content.startsWith(`${prefix}musiclist`)) {
         message.channel.send(modules_embeds.embeds_music_list(musicList))
     } else if (message.content.startsWith(`${prefix}help`)) {
-        message.channel.send(
-            'คำสั่ง\n' +
-            // ':musical_note:\n' +
-            '/play <YOUTUBE URL>\n' +
-            '/skip\n' +
-            '/stop\n' +
-            // ':loudspeaker:\n' +
-            '/google <ISO-3166-code> <word>\n' +
-            '/google <word>\n' +
-            // ':radioactive:\n' +
-            '/covid\n' +
-            // ':hash:\n' +
-            '/twitter [now][1d][7d][30d][year]\n' +
-            '/botv\n' +
-            '/musiclist\n' +
-            '/useronline\n'
-        );
+        // message.channel.send(
+        //     'คำสั่ง\n' +
+        //     // ':musical_note:\n' +
+        //     '/play <YOUTUBE URL>\n' +
+        //     '/skip\n' +
+        //     '/stop\n' +
+        //     // ':loudspeaker:\n' +
+        //     '/google <ISO-3166-code> <word>\n' +
+        //     '/google <word>\n' +
+        //     // ':radioactive:\n' +
+        //     '/covid\n' +
+        //     // ':hash:\n' +
+        //     '/twitter [now][1d][7d][30d][year]\n' +
+        //     '/botv\n' +
+        //     '/musiclist\n' +
+        //     '/useronline\n'
+        // );
+        message.channel.send(modules_embeds.embeds_help())
 
     } else if (message.content.startsWith(`${prefix}covid`)) {
         axios.get('https://covid19.th-stat.com/api/open/today').then((res) => {
@@ -187,21 +188,7 @@ client.on("message", async message => {
             .catch(console.error);
         if (widget_enabled) {
             axios.get('https://discord.com/api/guilds/' + message.guild.id + '/widget.json').then((res) => {
-                // var indexloop = 0;
-                // var botCount = 0;
-                for (let index = 0; index < res.data.members.length; index++) {
-                    message.channel.send((index + 1) + '. ' + res.data.members[index].username + ' : ' + res.data.members[index].status);
-                    // if (res.data.members[index].username != 'Bot เปิดเพลง') {
-                    //     indexloop++
-                    //     message.channel.send(indexloop + '. ' + res.data.members[index].username + ' : ' + res.data.members[index].status);
-                    // } else {
-                    //     botCount++
-                    // }
-
-                }
-                // var userSum = res.data.presence_count - botCount;
-                message.channel.send("------------------------------------------");
-                // message.channel.send("Online : " + userSum);
+                message.channel.send(modules_embeds.embeds_user_online(res.data))
             }).catch(function (error) {
                 console.log(error);
             });

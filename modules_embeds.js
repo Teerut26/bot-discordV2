@@ -187,3 +187,79 @@ exports.embeds_music_list = ((obj) => {
     embed
   }
 })
+
+exports.embeds_user_online = ((obj) => {
+  var embed = {
+    "color": 16590970,
+    "timestamp": n,
+    "author": {
+      "name": "User Online"
+    },
+    "fields": []
+  };
+  for (let index = 0; index < obj.members.length; index++) {
+    if (obj.members[index].status == 'online') {
+      var member_status = '🔴 ห้ามรบกวน'
+    }else if (obj.members[index].status == 'idle') {
+      var member_status = '🌙 ไม่อยู่'
+    }else{
+      var member_status = '🟢 Online'
+    }
+    embed.fields.push({
+      "name": (index+1)+". "+obj.members[index].username,
+      "value": member_status
+    })
+  }
+  return {
+    embed
+  }
+})
+
+exports.embeds_help = (()=>{
+  const embed = {
+    "color": 16590970,
+    "timestamp": n,
+    "author": {
+      "name": "Command SynthX"
+    },
+    "fields": [
+      {
+        "name": "/play",
+        "value": "เปิดเพลง : /play <YOUTUBE URL> || Keyword"
+      },
+      {
+        "name": "/skip",
+        "value": "ข้ามเพลง"
+      },
+      {
+        "name": "/stop",
+        "value": "หยุดเพลง"
+      },
+      {
+        "name": "/google",
+        "value": "เสียง Google : /google th สวัสดี"
+      },
+      {
+        "name": "/covid",
+        "value": "ดูจำนวนผู้ติดเชื้อ Covid"
+      },
+      {
+        "name": "/twitter",
+        "value": "ดู trending ใน twitter : /twitter [now][1d][7d][30d][year]"
+      },
+      {
+        "name": "/musiclist",
+        "value": "ดูคิวรายการเพลง"
+      },
+      {
+        "name": "/useronline",
+        "value": "แสดงสถานะของ user ใน discord"
+      },
+      {
+        "name": "/botv",
+        "value": "ดู version ของ bot"
+      }
+    ]
+  }
+  return {embed}
+})
