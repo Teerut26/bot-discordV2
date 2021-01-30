@@ -197,7 +197,7 @@ client.on("message", async message => {
         }
 
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.1.7 // Last Update 27/01/2021');
+        message.reply('Bot version 1.1.9// Last Update 30/01/2021');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
