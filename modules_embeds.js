@@ -125,6 +125,209 @@ exports.embeds_covid = ((obj) => {
   }
 })
 
+exports.embeds_crypto = ((obj) => {
+  const embed = {
+    "title": "Crypto BITKUB",
+    "color": 16711680,
+    "timestamp": n,
+    "thumbnail": {
+      "url": "https://www.gj.mahidol.ac.th/main/wp-content/uploads/2020/04/Picture1_Covid.png"
+    },
+    // "footer": {
+    //   "text": "UpdateDate :" + obj.UpdateDate
+    // },
+    "fields": [{
+        "name": "THB_BTC",
+        "value": obj.THB_BTC.last,
+        "inline": true
+      },
+      {
+        "name": "THB_ABT",
+        "value": obj.THB_ABT.last,
+        "inline": true
+      },
+      {
+        "name": "THB_ADA",
+        "value": obj.THB_ADA.last,
+        "inline": true
+      },
+      {
+        "name": "THB_BAND",
+        "value": obj.THB_BAND.last,
+        "inline": true
+      },
+      {
+        "name": "THB_BAT",
+        "value": obj.THB_BAT.last,
+        "inline": true
+      },
+      {
+        "name": "THB_BCH",
+        "value": obj.THB_BCH.last,
+        "inline": true
+      },
+      {
+        "name": "THB_BNB",
+        "value": obj.THB_BNB.last,
+        "inline": true
+      },
+      {
+        "name": "THB_BSV",
+        "value": obj.THB_BSV.last,
+        "inline": true
+      },
+      {
+        "name": "THB_CVC",
+        "value": obj.THB_CVC.last,
+        "inline": true
+      },
+      {
+        "name": "THB_DAI",
+        "value": obj.THB_DAI.last,
+        "inline": true
+      },
+      {
+        "name": "THB_DOGE",
+        "value": obj.THB_DOGE.last,
+        "inline": true
+      },
+      {
+        "name": "THB_DOT",
+        "value": obj.THB_DOT.last,
+        "inline": true
+      },
+      {
+        "name": "THB_ETH",
+        "value": obj.THB_ETH.last,
+        "inline": true
+      },
+      {
+        "name": "THB_EVX",
+        "value": obj.THB_EVX.last,
+        "inline": true
+      },
+      {
+        "name": "THB_GLM",
+        "value": obj.THB_GLM.last,
+        "inline": true
+      },
+      {
+        "name": "THB_INF",
+        "value": obj.THB_INF.last,
+        "inline": true
+      },
+      {
+        "name": "THB_IOST",
+        "value": obj.THB_IOST.last,
+        "inline": true
+      },
+      {
+        "name": "THB_JFIN",
+        "value": obj.THB_JFIN.last,
+        "inline": true
+      },
+      {
+        "name": "THB_KNC",
+        "value": obj.THB_KNC.last,
+        "inline": true
+      },
+      {
+        "name": "THB_KSM",
+        "value": obj.THB_KSM.last,
+        "inline": true
+      },
+      {
+        "name": "THB_LINK",
+        "value": obj.THB_LINK.last,
+        "inline": true
+      },
+      {
+        "name": "THB_LTC",
+        "value": obj.THB_LTC.last,
+        "inline": true
+      },
+      {
+        "name": "THB_MANA",
+        "value": obj.THB_MANA.last,
+        "inline": true
+      },
+      {
+        "name": "THB_NEAR",
+        "value": obj.THB_NEAR.last,
+        "inline": true
+      },
+      {
+        "name": "THB_OMG",
+        "value": obj.THB_OMG.last,
+        "inline": true
+      },
+      {
+        "name": "THB_POW",
+        "value": obj.THB_POW.last,
+        "inline": true
+      },
+      {
+        "name": "THB_RDN",
+        "value": obj.THB_RDN.last,
+        "inline": true
+      },
+      {
+        "name": "THB_SCRT",
+        "value": obj.THB_SCRT.last,
+        "inline": true
+      },
+      {
+        "name": "THB_SIX",
+        "value": obj.THB_SIX.last,
+        "inline": true
+      },
+      {
+        "name": "THB_SNT",
+        "value": obj.THB_SNT.last,
+        "inline": true
+      },
+      {
+        "name": "THB_USDC",
+        "value": obj.THB_USDC.last,
+        "inline": true
+      },
+      {
+        "name": "THB_USDT",
+        "value": obj.THB_USDT.last,
+        "inline": true
+      },
+      {
+        "name": "THB_WAN",
+        "value": obj.THB_WAN.last,
+        "inline": true
+      },
+      {
+        "name": "THB_XLM",
+        "value": obj.THB_XLM.last,
+        "inline": true
+      },
+      {
+        "name": "THB_XRP",
+        "value": obj.THB_XRP.last,
+        "inline": true
+      },
+      {
+        "name": "THB_ZIL",
+        "value": obj.THB_ZIL.last,
+        "inline": true
+      },
+      {
+        "name": "THB_ZRX",
+        "value": obj.THB_ZRX.last,
+        "inline": true
+      }
+    ]
+  };
+  return {
+    embed
+  }
+})
+
 
 exports.embeds_twitter = ((obj) => {
   var embed = {
@@ -238,6 +441,10 @@ exports.embeds_help = (()=>{
       {
         "name": "/google",
         "value": "เสียง Google : /google th สวัสดี"
+      },
+      {
+        "name": "/crypto",
+        "value": "ดูราคา Crypto ใน Bitkub"
       },
       {
         "name": "/covid",

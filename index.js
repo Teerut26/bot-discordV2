@@ -50,6 +50,22 @@ client.on("ready", () => {
     client.user.setActivity('SynthX | /help', {
         type: 'LISTENING'
     })
+    // client.user.setUsername('SynthX')
+    //     .then(user => console.log(`My new username is ${user.username}`))
+    //     .catch(console.error);
+
+
+    // setInterval(() => {
+    //     axios.get('https://api.bitkub.com/api/market/ticker').then((res) => {
+    //         // console.log(res.data.THB_BTC.last)
+    //         client.user.setActivity(res.data.THB_BTC.last, {
+    //             type: 'LISTENING'
+    //         })
+    //     }).catch(function (error) {
+    //         console.log(error);
+    //     });
+    // }, 5000)
+
     // i = 0
     // setInterval(() => {
     //     client.user.setActivity(text_activity[i], {
@@ -180,6 +196,13 @@ client.on("message", async message => {
         }).catch(function (error) {
             console.log(error);
         });
+    } else if (message.content.startsWith(`${prefix}crypto`)) {
+        let baseUrl = 'https://api.bitkub.com'
+        axios.get(baseUrl + '/api/market/ticker').then((res) => {
+            message.channel.send(modules_embeds.embeds_crypto(res.data));
+        }).catch(function (error) {
+            console.log(error);
+        });
     } else if (message.content.startsWith(`${prefix}useronline`)) {
         var widget_enabled;
         await message.guild.fetchWidget().then(function (widget) {
@@ -197,7 +220,7 @@ client.on("message", async message => {
         }
 
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.1.9// Last Update 30/01/2021');
+        message.reply('Bot version 1.2.0// Last Update 27/02/2021');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
@@ -289,9 +312,9 @@ async function execute(message, serverQueue) {
         url_thumbnails: songInfo.videoDetails.thumbnails[songInfo.videoDetails.thumbnails.length - 1].url,
         author: songInfo.videoDetails.author.name,
         uploadDate: songInfo.videoDetails.uploadDate,
-        type:"",
-        author_play:message.author.username,
-        author_profile_url:message.author.avatarURL('webp',true,64)
+        type: "",
+        author_play: message.author.username,
+        author_profile_url: message.author.avatarURL('webp', true, 64)
     };
 
     if (!serverQueue) {
@@ -308,7 +331,7 @@ async function execute(message, serverQueue) {
 
         queueContruct.songs.push(song);
         musicList.push(song)
-        modules_web.modules_list_music_push(song,message.guild.id)
+        modules_web.modules_list_music_push(song, message.guild.id)
 
 
         try {
@@ -323,7 +346,7 @@ async function execute(message, serverQueue) {
     } else {
         serverQueue.songs.push(song);
         musicList.push(song)
-        modules_web.modules_list_music_push(song,message.guild.id)
+        modules_web.modules_list_music_push(song, message.guild.id)
         return message.channel.send(`**${song.title}** เพิ่มลงในคิวการเล่นแล้ว!`);
     }
 }
