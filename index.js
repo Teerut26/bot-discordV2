@@ -220,7 +220,7 @@ client.on("message", async message => {
         }
 
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.2.0// Last Update 27/02/2021');
+        message.reply('Bot version 1.2.1// Last Update 20/03/2021');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
@@ -248,6 +248,41 @@ client.on("message", async message => {
                 message.reply('ต้องมีคนอยู่ในห้องก่อน');
             }
         }
+    } else if (message.content.match(/(\/urls) (.*)/g)) {
+        let re = /(\/urls) (.*)/g
+        let content = message.content.replace(re, '$2')
+        var data = 'url='+encodeURIComponent(content);
+
+        var config = {
+            method: 'post',
+            url: 'https://bitly.com/data/anon_shorten',
+            headers: {
+                'authority': 'bitly.com',
+                'sec-ch-ua': '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
+                'accept': 'application/json, text/javascript, */*; q=0.01',
+                'x-xsrftoken': 'fac34714c49842a59f14651b42b85089',
+                'x-requested-with': 'XMLHttpRequest',
+                'sec-ch-ua-mobile': '?0',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36',
+                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'origin': 'https://bitly.com',
+                'sec-fetch-site': 'same-origin',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-dest': 'empty',
+                'referer': 'https://bitly.com/',
+                'accept-language': 'th-TH,th;q=0.9,en;q=0.8',
+                'cookie': '_xsrf=fac34714c49842a59f14651b42b85089; anon_u=cHN1X185NWU1MTRmOS04N2Q1LTQ0OTctYWRiMS04NDY2MDNlOGZlOWY=|1616225331|dc8ccd1410dd96d988c1eeece84f04ebed3377bf; optimizelyEndUserId=oeu1616225332048r0.1252009492054551; _mkto_trk=id:754-KBJ-733&token:_mch-bitly.com-1616225332445-76585; _ga=GA1.2.532219545.1616225332; _gid=GA1.2.110884100.1616225332; wow-modal-id-7=yes; _gat=1'
+            },
+            data: data
+        };
+
+        axios(config).then((res) => {
+            message.channel.send(modules_embeds.embeds_url_short(res.data))
+            // console.log(res.data.data.link);
+        }).catch(function (error) {
+
+            console.log(error);
+        });
     } else if (message.content.match(/(\/twitter) (.*)/g)) {
         let re = /(\/twitter) (.*)/g
         let content = message.content.replace(re, '$2')

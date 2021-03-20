@@ -72,9 +72,6 @@ exports.embeds_covid = ((obj) => {
     "title": "Covid In Thailand",
     "color": 16711680,
     "timestamp": n,
-    "thumbnail": {
-      "url": "https://www.gj.mahidol.ac.th/main/wp-content/uploads/2020/04/Picture1_Covid.png"
-    },
     "footer": {
       "text": "UpdateDate :" + obj.UpdateDate
     },
@@ -418,6 +415,34 @@ exports.embeds_user_online = ((obj) => {
   }
 })
 
+exports.embeds_url_short = ((obj) => {
+  var embed = {
+    "color": 15622435,
+    "timestamp": n,
+    "footer": {
+      "icon_url": "https://docrdsfx76ssb.cloudfront.net/static/1616013790/pages/wp-content/uploads/2019/02/bitly.png",
+      "text": "bitly.com"
+    },
+    "author": {
+      "name": "Link Short"
+    },
+    "fields": [
+      {
+        "name": "URL_Old",
+        "value": obj.data.long_url
+      },
+      {
+        "name": "URL_New",
+        "value": obj.data.link
+      }
+    ]
+  };
+  
+  return {
+    embed
+  }
+})
+
 exports.embeds_help = (()=>{
   const embed = {
     "color": 16590970,
@@ -453,6 +478,10 @@ exports.embeds_help = (()=>{
       {
         "name": "/twitter",
         "value": "ดู trending ใน twitter : /twitter [now][1d][7d][30d][year]"
+      },
+      {
+        "name": "/urls",
+        "value": "ย่อลิงค์ : /urls [url]"
       },
       {
         "name": "/musiclist",
