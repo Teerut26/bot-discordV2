@@ -220,7 +220,7 @@ client.on("message", async message => {
         }
 
     } else if (message.content.startsWith(`${prefix}botv`)) {
-        message.reply('Bot version 1.2.1// Last Update 20/03/2021');
+        message.reply('Bot version 1.2.2// Last Update 22/03/2021');
     } else if (message.content.match(/(\/google) (.*?) (.*)/gm)) {
         let re = /(\/google) (.*?) (.*)/gm
         let command = message.content.replace(re, '$1')
@@ -248,6 +248,20 @@ client.on("message", async message => {
                 message.reply('ต้องมีคนอยู่ในห้องก่อน');
             }
         }
+    } else if (message.content.match(/(\/cinema) (.*)/g)) {
+        let re = /(\/cinema) (.*)/g
+        let type_cinema = message.content.replace(re, '$2')
+
+        if (type_cinema == 'sf') {
+            axios.get('http://showtimes.everyday.in.th/api/v2/theater/25/showtimes/?offset=0&limit=30&date=today').then((respone) => {
+                message.channel.send(modules_embeds.embeds_moive(respone.data,type_cinema))
+            })
+        }else if (type_cinema == 'major') {
+            axios.get('http://showtimes.everyday.in.th/api/v2/theater/266/showtimes/?offset=0&limit=30&date=today').then((respone) => {
+                message.channel.send(modules_embeds.embeds_moive(respone.data,type_cinema))
+            })
+        }
+
     } else if (message.content.match(/(\/urls) (.*)/g)) {
         let re = /(\/urls) (.*)/g
         let content = message.content.replace(re, '$2')

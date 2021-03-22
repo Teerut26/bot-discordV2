@@ -400,13 +400,13 @@ exports.embeds_user_online = ((obj) => {
   for (let index = 0; index < obj.members.length; index++) {
     if (obj.members[index].status == 'online') {
       var member_status = '🔴 ห้ามรบกวน'
-    }else if (obj.members[index].status == 'idle') {
+    } else if (obj.members[index].status == 'idle') {
       var member_status = '🌙 ไม่อยู่'
-    }else{
+    } else {
       var member_status = '🟢 Online'
     }
     embed.fields.push({
-      "name": (index+1)+". "+obj.members[index].username,
+      "name": (index + 1) + ". " + obj.members[index].username,
       "value": member_status
     })
   }
@@ -426,8 +426,7 @@ exports.embeds_url_short = ((obj) => {
     "author": {
       "name": "Link Short"
     },
-    "fields": [
-      {
+    "fields": [{
         "name": "URL_Old",
         "value": obj.data.long_url
       },
@@ -437,21 +436,20 @@ exports.embeds_url_short = ((obj) => {
       }
     ]
   };
-  
+
   return {
     embed
   }
 })
 
-exports.embeds_help = (()=>{
+exports.embeds_help = (() => {
   const embed = {
     "color": 16590970,
     "timestamp": n,
     "author": {
       "name": "Command SynthX"
     },
-    "fields": [
-      {
+    "fields": [{
         "name": "/play",
         "value": "เปิดเพลง : /play <YOUTUBE URL> || Keyword"
       },
@@ -480,6 +478,10 @@ exports.embeds_help = (()=>{
         "value": "ดู trending ใน twitter : /twitter [now][1d][7d][30d][year]"
       },
       {
+        "name": "/cinema",
+        "value": "ดูรอบฉายหนังในจังหวัดกาญจนบุรี : /cinema [sf][major]"
+      },
+      {
         "name": "/urls",
         "value": "ย่อลิงค์ : /urls [url]"
       },
@@ -497,5 +499,43 @@ exports.embeds_help = (()=>{
       }
     ]
   }
-  return {embed}
+  return {
+    embed
+  }
+})
+
+exports.embeds_moive = ((obj,type) => {
+  if(type == 'sf'){
+    title = 'SF Cinema City Robinson Kanchanaburi'
+    logo_url = 'https://lh3.googleusercontent.com/LhLoK1y-oVUXvievJsUU3lLpoxBGdsR8DD3AZy6WOmGZd19oJ5e3ugjTTgTL13jCYyxKY-956oNoDFFOS0Ab6w=s0'
+  }else{
+    title = 'Major TMK Kanchanaburi'
+    logo_url = 'https://deepscope.com/setscope-include/images/TH/icon/MAJOR.jpg'
+  }
+  const embed = {
+    "title": 'รอบของวันนี้',
+    "thumbnail": {
+      "url": logo_url
+    },
+    "color": 16590970,
+    "timestamp": n,
+    "author": {
+      "name": title
+    },
+    "fields": []
+  }
+  for (let index = 0; index < obj.results.length; index++) {
+    word_round = ''
+    for (let index2 = 0; index2 < obj.results[index].showtimes.length; index2++) {
+      word_round = word_round + ' [' + obj.results[index].showtimes[index2]+ ']' 
+    }
+    embed.fields.push({
+      "name": obj.results[index].movie_title+' ['+obj.results[index].movie_duration+' นาที]',
+      "value": word_round
+    })
+  }
+
+  return {
+    embed
+  }
 })
