@@ -450,51 +450,55 @@ exports.embeds_help = (() => {
       "name": "Command SynthX"
     },
     "fields": [{
-        "name": "/play",
-        "value": "เปิดเพลง : /play <YOUTUBE URL> || Keyword"
+        "name": "*play",
+        "value": "เปิดเพลง : *play <YOUTUBE URL> || Keyword"
       },
       {
-        "name": "/skip",
+        "name": "*skip",
         "value": "ข้ามเพลง"
       },
       {
-        "name": "/stop",
+        "name": "*stop",
         "value": "หยุดเพลง"
       },
       {
-        "name": "/google",
-        "value": "เสียง Google : /google th สวัสดี"
+        "name": "*google",
+        "value": "เสียง Google : *google th สวัสดี"
       },
       {
-        "name": "/crypto",
+        "name": "*crypto",
         "value": "ดูราคา Crypto ใน Bitkub"
       },
       {
-        "name": "/covid",
+        "name": "*covid",
         "value": "ดูจำนวนผู้ติดเชื้อ Covid"
       },
       {
-        "name": "/twitter",
-        "value": "ดู trending ใน twitter : /twitter [now][1d][7d][30d][year]"
+        "name": "*twitter",
+        "value": "ดู trending ใน twitter : *twitter [now][1d][7d][30d][year]"
       },
       {
-        "name": "/cinema",
-        "value": "ดูรอบฉายหนังในจังหวัดกาญจนบุรี : /cinema [sf][major]"
+        "name": "*cinema",
+        "value": "ดูรอบฉายหนังในจังหวัดกาญจนบุรี : *cinema [sf][major]"
       },
       {
-        "name": "/urls",
-        "value": "ย่อลิงค์ : /urls [url]"
+        "name": "*urls",
+        "value": "ย่อลิงค์ : *urls [url]"
       },
       {
-        "name": "/musiclist",
+        "name": "*musiclist",
         "value": "ดูคิวรายการเพลง"
       },
       {
-        "name": "/useronline",
+        "name": "*useronline",
         "value": "แสดงสถานะของ user ใน discord"
       },
       {
-        "name": "/botv",
+        "name": "*qr",
+        "value": "สร้าง QR-Code : *qr [text]"
+      },
+      {
+        "name": "*botv",
         "value": "ดู version ของ bot"
       }
     ]
