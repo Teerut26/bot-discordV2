@@ -362,18 +362,64 @@ client.on("message", async (message) => {
   } else if (message.content.match(/(\*qr) (.*)/g)) {
     let re = /(\*qr) (.*)/g;
     let content = message.content.replace(re, "$2");
-    QRCode.toFile('temp/filename.png', content, {
+    QRCode.toFile(
+      "temp/filename.png",
+      content,
+      {
         color: {
-          dark: '#020001',  // Blue dots
+          dark: "#020001", // Blue dots
           // light: '#0000' // Transparent background
-          light: '#FFFFFF' // Transparent background
-        }
-      }, function (err) {
-        if (err) throw err
+          light: "#FFFFFF", // Transparent background
+        },
+      },
+      function (err) {
+        if (err) throw err;
         // message.channel.reply({files: ["temp/filename.png"]})
-        message.reply({files: ["temp/filename.png"]})
-        console.log('done')
-      })
+        message.reply({ files: ["temp/filename.png"] });
+        console.log("done");
+      }
+    );
+  } else if (message.content.match(/(\*time)/g)) {
+    let default_time = new Date().toLocaleString("th-TH", {
+      timeZone: "Asia/Bangkok",
+    });
+    let now = new Date(default_time);
+    let content = `ขณะนี้เวลา ${now.getHours()}นาฬิกา ${now.getMinutes()}นาที ${now.getSeconds()}วินาที`;
+
+    if (message.member.voice.channel) {
+      const connection = await message.member.voice.channel.join();
+      connection.play(
+        "http://translate.google.com/translate_tts?ie=UTF-8&q=" +
+          encodeURIComponent(content) +
+          "&tl=th&client=tw-ob"
+      );
+      message.reply("OK! : " + code + " " + content);
+    } else {
+      message.reply("ต้องมีคนอยู่ในห้องก่อน");
+    }
+  } else if (message.content.match(/(\*day)/g)) {
+    let default_time = new Date()
+    // let now = new Date(default_time);
+    const result = default_time.toLocaleDateString('th-TH', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long',
+    })
+    // console.log(result)
+    let content = `${result.replace(default_time.getFullYear()+543,`พุทธศักราช ${default_time.getFullYear()+543}`)}`;
+
+    if (message.member.voice.channel) {
+      const connection = await message.member.voice.channel.join();
+      connection.play(
+        "http://translate.google.com/translate_tts?ie=UTF-8&q=" +
+          encodeURIComponent(content) +
+          "&tl=th&client=tw-ob"
+      );
+      message.reply("OK! : " + content);
+    } else {
+      message.reply("ต้องมีคนอยู่ในห้องก่อน");
+    }
   } else {
     message.channel.send("คุณต้องป้อนคำสั่งที่ถูกต้อง!");
   }

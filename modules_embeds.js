@@ -498,6 +498,14 @@ exports.embeds_help = (() => {
         "value": "สร้าง QR-Code : *qr [text]"
       },
       {
+        "name": "*time",
+        "value": "เสียง Google บอกเวลา: *time"
+      },
+      {
+        "name": "*day",
+        "value": "เสียง Google บอกวันที่ : *day"
+      },
+      {
         "name": "*botv",
         "value": "ดู version ของ bot"
       }
