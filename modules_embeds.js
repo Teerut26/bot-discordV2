@@ -518,6 +518,10 @@ exports.embeds_help = () => {
         value: "เสียง Google บอกวันที่ : *day",
       },
       {
+        name: "*ch",
+        value: "ดู cub ของ clubhouse : *ch",
+      },
+      {
         name: "*botv",
         value: "ดู version ของ bot",
       },
