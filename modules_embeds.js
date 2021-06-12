@@ -552,7 +552,7 @@ exports.embeds_clubhouse = (obj) => {
         TOPIC : ${obj.channels[index].topic.replace(/^(.{20}[^\s]*).*/, "$1")}...
         🙍‍♂️ : ${obj.channels[index].num_all}
         :speech_balloon: : ${obj.channels[index].num_speakers}
-        
+        [link](${obj.channels[index].url})
         ------------------------------------`,
       });
     } else {
