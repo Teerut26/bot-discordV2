@@ -1,553 +1,606 @@
 const Discord = require("discord.js");
-var modules_basic = require('./modules_basic.js')
+var modules_basic = require("./modules_basic.js");
 
 var d = new Date();
 var n = d.toJSON();
 
-exports.embeds_play = ((obj) => {
+exports.embeds_play = (obj) => {
   // console.log(obj)
   const exampleEmbed = new Discord.MessageEmbed()
-    .setColor('#FF0000')
+    .setColor("#FF0000")
     .setTitle(obj.song_Title)
-    .addField('UploadDate', obj.song_uploadDate)
-    .addField('ViewCount', obj.song_view_count)
-    .addField('Likes', obj.song_likes)
-    .addField('Dislikes', obj.song_disklike)
-    .addField('Author', obj.song_author)
+    .addField("UploadDate", obj.song_uploadDate)
+    .addField("ViewCount", obj.song_view_count)
+    .addField("Likes", obj.song_likes)
+    .addField("Dislikes", obj.song_disklike)
+    .addField("Author", obj.song_author)
     .setImage(obj.url_thumbnails)
-    .setTimestamp()
+    .setTimestamp();
 
-  return exampleEmbed
-})
+  return exampleEmbed;
+};
 
-exports.embeds_play_v2 = ((obj) => {
+exports.embeds_play_v2 = (obj) => {
   var embed = {
-    "title": obj.song_Title,
-    "color": 16711680,
-    "timestamp": n,
-    "footer": {
-      "icon_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png",
-      "text": obj.song_Title
+    title: obj.song_Title,
+    color: 16711680,
+    timestamp: n,
+    footer: {
+      icon_url:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png",
+      text: obj.song_Title,
     },
-    "thumbnail": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png"
+    thumbnail: {
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png",
     },
-    "image": {
-      "url": obj.url_thumbnails
+    image: {
+      url: obj.url_thumbnails,
     },
-    "fields": [{
-        "name": "UploadDate",
-        "value": obj.song_uploadDate,
-        "inline": false
+    fields: [
+      {
+        name: "UploadDate",
+        value: obj.song_uploadDate,
+        inline: false,
       },
       {
-        "name": "ViewCount",
-        "value": obj.song_view_count,
-        "inline": false
+        name: "ViewCount",
+        value: obj.song_view_count,
+        inline: false,
       },
       {
-        "name": "Likes",
-        "value": obj.song_likes,
-        "inline": true
+        name: "Likes",
+        value: obj.song_likes,
+        inline: true,
       },
       {
-        "name": "Dislikes",
-        "value": obj.song_disklike,
-        "inline": true
+        name: "Dislikes",
+        value: obj.song_disklike,
+        inline: true,
       },
       {
-        "name": "Author",
-        "value": obj.song_author,
-        "inline": false
+        name: "Author",
+        value: obj.song_author,
+        inline: false,
       },
-    ]
+    ],
   };
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-exports.embeds_covid = ((obj) => {
+exports.embeds_covid = (obj) => {
   const embed = {
-    "title": "Covid In Thailand",
-    "color": 16711680,
-    "timestamp": n,
-    "footer": {
-      "text": "UpdateDate :" + obj.UpdateDate
+    title: "Covid In Thailand",
+    color: 16711680,
+    timestamp: n,
+    footer: {
+      text: "UpdateDate :" + obj.UpdateDate,
     },
-    "fields": [{
-        "name": "Confirmed",
-        "value": modules_basic.commaSeparateNumber(obj.Confirmed),
-        "inline": true
+    fields: [
+      {
+        name: "Confirmed",
+        value: modules_basic.commaSeparateNumber(obj.Confirmed),
+        inline: true,
       },
       {
-        "name": "Recovered",
-        "value": modules_basic.commaSeparateNumber(obj.Recovered),
-        "inline": true
+        name: "Recovered",
+        value: modules_basic.commaSeparateNumber(obj.Recovered),
+        inline: true,
       },
       {
-        "name": "Hospitalized",
-        "value": modules_basic.commaSeparateNumber(obj.Hospitalized),
-        "inline": true
+        name: "Hospitalized",
+        value: modules_basic.commaSeparateNumber(obj.Hospitalized),
+        inline: true,
       },
       {
-        "name": "Deaths",
-        "value": modules_basic.commaSeparateNumber(obj.Deaths),
-        "inline": true
+        name: "Deaths",
+        value: modules_basic.commaSeparateNumber(obj.Deaths),
+        inline: true,
       },
       {
-        "name": "NewConfirmed",
-        "value": modules_basic.commaSeparateNumber(obj.NewConfirmed),
-        "inline": true
+        name: "NewConfirmed",
+        value: modules_basic.commaSeparateNumber(obj.NewConfirmed),
+        inline: true,
       },
       {
-        "name": "NewRecovered",
-        "value": modules_basic.commaSeparateNumber(obj.NewRecovered),
-        "inline": true
+        name: "NewRecovered",
+        value: modules_basic.commaSeparateNumber(obj.NewRecovered),
+        inline: true,
       },
       {
-        "name": "NewHospitalized",
-        "value": modules_basic.commaSeparateNumber(obj.NewHospitalized),
-        "inline": true
+        name: "NewHospitalized",
+        value: modules_basic.commaSeparateNumber(obj.NewHospitalized),
+        inline: true,
       },
       {
-        "name": "NewDeaths",
-        "value": modules_basic.commaSeparateNumber(obj.NewDeaths),
-        "inline": true
-      }
-    ]
+        name: "NewDeaths",
+        value: modules_basic.commaSeparateNumber(obj.NewDeaths),
+        inline: true,
+      },
+    ],
   };
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-exports.embeds_crypto = ((obj) => {
+exports.embeds_crypto = (obj) => {
   const embed = {
-    "title": "Crypto BITKUB",
-    "color": 16711680,
-    "timestamp": n,
-    "thumbnail": {
-      "url": "https://www.gj.mahidol.ac.th/main/wp-content/uploads/2020/04/Picture1_Covid.png"
+    title: "Crypto BITKUB",
+    color: 16711680,
+    timestamp: n,
+    thumbnail: {
+      url: "https://www.gj.mahidol.ac.th/main/wp-content/uploads/2020/04/Picture1_Covid.png",
     },
     // "footer": {
     //   "text": "UpdateDate :" + obj.UpdateDate
     // },
-    "fields": [{
-        "name": "THB_BTC",
-        "value": obj.THB_BTC.last,
-        "inline": true
+    fields: [
+      {
+        name: "THB_BTC",
+        value: obj.THB_BTC.last,
+        inline: true,
       },
       {
-        "name": "THB_ABT",
-        "value": obj.THB_ABT.last,
-        "inline": true
+        name: "THB_ABT",
+        value: obj.THB_ABT.last,
+        inline: true,
       },
       {
-        "name": "THB_ADA",
-        "value": obj.THB_ADA.last,
-        "inline": true
+        name: "THB_ADA",
+        value: obj.THB_ADA.last,
+        inline: true,
       },
       {
-        "name": "THB_BAND",
-        "value": obj.THB_BAND.last,
-        "inline": true
+        name: "THB_BAND",
+        value: obj.THB_BAND.last,
+        inline: true,
       },
       {
-        "name": "THB_BAT",
-        "value": obj.THB_BAT.last,
-        "inline": true
+        name: "THB_BAT",
+        value: obj.THB_BAT.last,
+        inline: true,
       },
       {
-        "name": "THB_BCH",
-        "value": obj.THB_BCH.last,
-        "inline": true
+        name: "THB_BCH",
+        value: obj.THB_BCH.last,
+        inline: true,
       },
       {
-        "name": "THB_BNB",
-        "value": obj.THB_BNB.last,
-        "inline": true
+        name: "THB_BNB",
+        value: obj.THB_BNB.last,
+        inline: true,
       },
       {
-        "name": "THB_BSV",
-        "value": obj.THB_BSV.last,
-        "inline": true
+        name: "THB_BSV",
+        value: obj.THB_BSV.last,
+        inline: true,
       },
       {
-        "name": "THB_CVC",
-        "value": obj.THB_CVC.last,
-        "inline": true
+        name: "THB_CVC",
+        value: obj.THB_CVC.last,
+        inline: true,
       },
       {
-        "name": "THB_DAI",
-        "value": obj.THB_DAI.last,
-        "inline": true
+        name: "THB_DAI",
+        value: obj.THB_DAI.last,
+        inline: true,
       },
       {
-        "name": "THB_DOGE",
-        "value": obj.THB_DOGE.last,
-        "inline": true
+        name: "THB_DOGE",
+        value: obj.THB_DOGE.last,
+        inline: true,
       },
       {
-        "name": "THB_DOT",
-        "value": obj.THB_DOT.last,
-        "inline": true
+        name: "THB_DOT",
+        value: obj.THB_DOT.last,
+        inline: true,
       },
       {
-        "name": "THB_ETH",
-        "value": obj.THB_ETH.last,
-        "inline": true
+        name: "THB_ETH",
+        value: obj.THB_ETH.last,
+        inline: true,
       },
       {
-        "name": "THB_EVX",
-        "value": obj.THB_EVX.last,
-        "inline": true
+        name: "THB_EVX",
+        value: obj.THB_EVX.last,
+        inline: true,
       },
       {
-        "name": "THB_GLM",
-        "value": obj.THB_GLM.last,
-        "inline": true
+        name: "THB_GLM",
+        value: obj.THB_GLM.last,
+        inline: true,
       },
       {
-        "name": "THB_INF",
-        "value": obj.THB_INF.last,
-        "inline": true
+        name: "THB_INF",
+        value: obj.THB_INF.last,
+        inline: true,
       },
       {
-        "name": "THB_IOST",
-        "value": obj.THB_IOST.last,
-        "inline": true
+        name: "THB_IOST",
+        value: obj.THB_IOST.last,
+        inline: true,
       },
       {
-        "name": "THB_JFIN",
-        "value": obj.THB_JFIN.last,
-        "inline": true
+        name: "THB_JFIN",
+        value: obj.THB_JFIN.last,
+        inline: true,
       },
       {
-        "name": "THB_KNC",
-        "value": obj.THB_KNC.last,
-        "inline": true
+        name: "THB_KNC",
+        value: obj.THB_KNC.last,
+        inline: true,
       },
       {
-        "name": "THB_KSM",
-        "value": obj.THB_KSM.last,
-        "inline": true
+        name: "THB_KSM",
+        value: obj.THB_KSM.last,
+        inline: true,
       },
       {
-        "name": "THB_LINK",
-        "value": obj.THB_LINK.last,
-        "inline": true
+        name: "THB_LINK",
+        value: obj.THB_LINK.last,
+        inline: true,
       },
       {
-        "name": "THB_LTC",
-        "value": obj.THB_LTC.last,
-        "inline": true
+        name: "THB_LTC",
+        value: obj.THB_LTC.last,
+        inline: true,
       },
       {
-        "name": "THB_MANA",
-        "value": obj.THB_MANA.last,
-        "inline": true
+        name: "THB_MANA",
+        value: obj.THB_MANA.last,
+        inline: true,
       },
       {
-        "name": "THB_NEAR",
-        "value": obj.THB_NEAR.last,
-        "inline": true
+        name: "THB_NEAR",
+        value: obj.THB_NEAR.last,
+        inline: true,
       },
       {
-        "name": "THB_OMG",
-        "value": obj.THB_OMG.last,
-        "inline": true
+        name: "THB_OMG",
+        value: obj.THB_OMG.last,
+        inline: true,
       },
       {
-        "name": "THB_POW",
-        "value": obj.THB_POW.last,
-        "inline": true
+        name: "THB_POW",
+        value: obj.THB_POW.last,
+        inline: true,
       },
       {
-        "name": "THB_RDN",
-        "value": obj.THB_RDN.last,
-        "inline": true
+        name: "THB_RDN",
+        value: obj.THB_RDN.last,
+        inline: true,
       },
       {
-        "name": "THB_SCRT",
-        "value": obj.THB_SCRT.last,
-        "inline": true
+        name: "THB_SCRT",
+        value: obj.THB_SCRT.last,
+        inline: true,
       },
       {
-        "name": "THB_SIX",
-        "value": obj.THB_SIX.last,
-        "inline": true
+        name: "THB_SIX",
+        value: obj.THB_SIX.last,
+        inline: true,
       },
       {
-        "name": "THB_SNT",
-        "value": obj.THB_SNT.last,
-        "inline": true
+        name: "THB_SNT",
+        value: obj.THB_SNT.last,
+        inline: true,
       },
       {
-        "name": "THB_USDC",
-        "value": obj.THB_USDC.last,
-        "inline": true
+        name: "THB_USDC",
+        value: obj.THB_USDC.last,
+        inline: true,
       },
       {
-        "name": "THB_USDT",
-        "value": obj.THB_USDT.last,
-        "inline": true
+        name: "THB_USDT",
+        value: obj.THB_USDT.last,
+        inline: true,
       },
       {
-        "name": "THB_WAN",
-        "value": obj.THB_WAN.last,
-        "inline": true
+        name: "THB_WAN",
+        value: obj.THB_WAN.last,
+        inline: true,
       },
       {
-        "name": "THB_XLM",
-        "value": obj.THB_XLM.last,
-        "inline": true
+        name: "THB_XLM",
+        value: obj.THB_XLM.last,
+        inline: true,
       },
       {
-        "name": "THB_XRP",
-        "value": obj.THB_XRP.last,
-        "inline": true
+        name: "THB_XRP",
+        value: obj.THB_XRP.last,
+        inline: true,
       },
       {
-        "name": "THB_ZIL",
-        "value": obj.THB_ZIL.last,
-        "inline": true
+        name: "THB_ZIL",
+        value: obj.THB_ZIL.last,
+        inline: true,
       },
       {
-        "name": "THB_ZRX",
-        "value": obj.THB_ZRX.last,
-        "inline": true
-      }
-    ]
+        name: "THB_ZRX",
+        value: obj.THB_ZRX.last,
+        inline: true,
+      },
+    ],
   };
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-
-exports.embeds_twitter = ((obj) => {
+exports.embeds_twitter = (obj) => {
   var embed = {
-    "color": 4303841,
-    "timestamp": n,
-    "footer": {
-      "icon_url": "https://upload.wikimedia.org/wikipedia/th/6/62/Twitter_bird_logo_2012.png",
-      "text": "Trending In Thailand"
+    color: 4303841,
+    timestamp: n,
+    footer: {
+      icon_url:
+        "https://upload.wikimedia.org/wikipedia/th/6/62/Twitter_bird_logo_2012.png",
+      text: "Trending In Thailand",
     },
-    "thumbnail": {
-      "url": "https://upload.wikimedia.org/wikipedia/th/6/62/Twitter_bird_logo_2012.png"
+    thumbnail: {
+      url: "https://upload.wikimedia.org/wikipedia/th/6/62/Twitter_bird_logo_2012.png",
     },
-    "author": {
-      "name": "Trending In Thailand",
-      "url": "https://discordapp.com"
+    author: {
+      name: "Trending In Thailand",
+      url: "https://discordapp.com",
     },
-    "fields": []
+    fields: [],
   };
 
   for (let index = 0; index < 10; index++) {
     obj2 = {
-      "name": (index + 1) + ". " + obj[index].hastag,
-      "value": obj[index].tweets + " / " + obj[index].record + " [ดูเพิ่มเติม](https://twitter.com/search?q=" + encodeURIComponent(obj[index].hastag) + "&src=trend_click)"
-    }
-    embed.fields.push(obj2)
+      name: index + 1 + ". " + obj[index].hastag,
+      value:
+        obj[index].tweets +
+        " / " +
+        obj[index].record +
+        " [ดูเพิ่มเติม](https://twitter.com/search?q=" +
+        encodeURIComponent(obj[index].hastag) +
+        "&src=trend_click)",
+    };
+    embed.fields.push(obj2);
   }
 
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-
-exports.embeds_music_list = ((obj) => {
+exports.embeds_music_list = (obj) => {
   var embed = {
-    "color": 4303841,
-    "timestamp": n,
-    "footer": {
-      "text": "Music List"
+    color: 4303841,
+    timestamp: n,
+    footer: {
+      text: "Music List",
     },
-    "author": {
-      "name": "Music List",
+    author: {
+      name: "Music List",
     },
-    "fields": []
+    fields: [],
   };
   for (let index = 0; index < obj.length; index++) {
     if (embed.fields.length == 0) {
       embed.fields.push({
-        "name": (index + 1) + ". " + obj[index].title,
-        "value": obj[index].author_play + " / playing"
-      })
+        name: index + 1 + ". " + obj[index].title,
+        value: obj[index].author_play + " / playing",
+      });
     } else {
       embed.fields.push({
-        "name": (index + 1) + ". " + obj[index].title,
-        "value": obj[index].author_play + " / next"
-      })
+        name: index + 1 + ". " + obj[index].title,
+        value: obj[index].author_play + " / next",
+      });
     }
   }
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-exports.embeds_user_online = ((obj) => {
+exports.embeds_user_online = (obj) => {
   var embed = {
-    "color": 16590970,
-    "timestamp": n,
-    "author": {
-      "name": "User Online"
+    color: 16590970,
+    timestamp: n,
+    author: {
+      name: "User Online",
     },
-    "fields": []
+    fields: [],
   };
   for (let index = 0; index < obj.members.length; index++) {
-    if (obj.members[index].status == 'online') {
-      var member_status = '🔴 ห้ามรบกวน'
-    } else if (obj.members[index].status == 'idle') {
-      var member_status = '🌙 ไม่อยู่'
+    if (obj.members[index].status == "online") {
+      var member_status = "🔴 ห้ามรบกวน";
+    } else if (obj.members[index].status == "idle") {
+      var member_status = "🌙 ไม่อยู่";
     } else {
-      var member_status = '🟢 Online'
+      var member_status = "🟢 Online";
     }
     embed.fields.push({
-      "name": (index + 1) + ". " + obj.members[index].username,
-      "value": member_status
-    })
+      name: index + 1 + ". " + obj.members[index].username,
+      value: member_status,
+    });
   }
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-exports.embeds_url_short = ((obj) => {
+exports.embeds_url_short = (obj) => {
   var embed = {
-    "color": 15622435,
-    "timestamp": n,
-    "footer": {
-      "icon_url": "https://docrdsfx76ssb.cloudfront.net/static/1616013790/pages/wp-content/uploads/2019/02/bitly.png",
-      "text": "bitly.com"
+    color: 15622435,
+    timestamp: n,
+    footer: {
+      icon_url:
+        "https://docrdsfx76ssb.cloudfront.net/static/1616013790/pages/wp-content/uploads/2019/02/bitly.png",
+      text: "bitly.com",
     },
-    "author": {
-      "name": "Link Short"
+    author: {
+      name: "Link Short",
     },
-    "fields": [{
-        "name": "URL_Old",
-        "value": obj.data.long_url
+    fields: [
+      {
+        name: "URL_Old",
+        value: obj.data.long_url,
       },
       {
-        "name": "URL_New",
-        "value": obj.data.link
-      }
-    ]
+        name: "URL_New",
+        value: obj.data.link,
+      },
+    ],
   };
 
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-exports.embeds_help = (() => {
+exports.embeds_help = () => {
   const embed = {
-    "color": 16590970,
-    "timestamp": n,
-    "author": {
-      "name": "Command SynthX"
+    color: 16590970,
+    timestamp: n,
+    author: {
+      name: "Command SynthX",
     },
-    "fields": [{
-        "name": "*play",
-        "value": "เปิดเพลง : *play <YOUTUBE URL> || Keyword"
+    fields: [
+      {
+        name: "*play",
+        value: "เปิดเพลง : *play <YOUTUBE URL> || Keyword",
       },
       {
-        "name": "*skip",
-        "value": "ข้ามเพลง"
+        name: "*skip",
+        value: "ข้ามเพลง",
       },
       {
-        "name": "*stop",
-        "value": "หยุดเพลง"
+        name: "*stop",
+        value: "หยุดเพลง",
       },
       {
-        "name": "*google",
-        "value": "เสียง Google : *google th สวัสดี"
+        name: "*google",
+        value: "เสียง Google : *google th สวัสดี",
       },
       {
-        "name": "*crypto",
-        "value": "ดูราคา Crypto ใน Bitkub"
+        name: "*crypto",
+        value: "ดูราคา Crypto ใน Bitkub",
       },
       {
-        "name": "*covid",
-        "value": "ดูจำนวนผู้ติดเชื้อ Covid"
+        name: "*covid",
+        value: "ดูจำนวนผู้ติดเชื้อ Covid",
       },
       {
-        "name": "*twitter",
-        "value": "ดู trending ใน twitter : *twitter [now][1d][7d][30d][year]"
+        name: "*twitter",
+        value: "ดู trending ใน twitter : *twitter [now][1d][7d][30d][year]",
       },
       {
-        "name": "*cinema",
-        "value": "ดูรอบฉายหนังในจังหวัดกาญจนบุรี : *cinema [sf][major]"
+        name: "*cinema",
+        value: "ดูรอบฉายหนังในจังหวัดกาญจนบุรี : *cinema [sf][major]",
       },
       {
-        "name": "*urls",
-        "value": "ย่อลิงค์ : *urls [url]"
+        name: "*urls",
+        value: "ย่อลิงค์ : *urls [url]",
       },
       {
-        "name": "*musiclist",
-        "value": "ดูคิวรายการเพลง"
+        name: "*musiclist",
+        value: "ดูคิวรายการเพลง",
       },
       {
-        "name": "*useronline",
-        "value": "แสดงสถานะของ user ใน discord"
+        name: "*useronline",
+        value: "แสดงสถานะของ user ใน discord",
       },
       {
-        "name": "*qr",
-        "value": "สร้าง QR-Code : *qr [text]"
+        name: "*qr",
+        value: "สร้าง QR-Code : *qr [text]",
       },
       {
-        "name": "*time",
-        "value": "เสียง Google บอกเวลา: *time"
+        name: "*time",
+        value: "เสียง Google บอกเวลา: *time",
       },
       {
-        "name": "*day",
-        "value": "เสียง Google บอกวันที่ : *day"
+        name: "*day",
+        value: "เสียง Google บอกวันที่ : *day",
       },
       {
-        "name": "*botv",
-        "value": "ดู version ของ bot"
-      }
-    ]
-  }
+        name: "*botv",
+        value: "ดู version ของ bot",
+      },
+    ],
+  };
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
 
-exports.embeds_moive = ((obj,type) => {
-  if(type == 'sf'){
-    title = 'SF Cinema City Robinson Kanchanaburi'
-    logo_url = 'https://lh3.googleusercontent.com/LhLoK1y-oVUXvievJsUU3lLpoxBGdsR8DD3AZy6WOmGZd19oJ5e3ugjTTgTL13jCYyxKY-956oNoDFFOS0Ab6w=s0'
-  }else{
-    title = 'Major TMK Kanchanaburi'
-    logo_url = 'https://deepscope.com/setscope-include/images/TH/icon/MAJOR.jpg'
+exports.embeds_clubhouse = (obj) => {
+  const embed = {
+    title: "Clubhouse Channal",
+    thumbnail: {
+      url: "https://play-lh.googleusercontent.com/GUMEenmbv0KoghJvUn0tTouMKf-7oO26fhH1LzfeAGQY2fylgK_Oh5OD3DFCg-SqKA0",
+    },
+    color: 16590970,
+    timestamp: n,
+    fields: [],
+  };
+  for (let index = 0; index < 10; index++) {
+    if (obj.channels[index].club) {
+      embed.fields.push({
+        name: `Club : ${
+          obj.channels[index].club ? obj.channels[index].club.name : "null"
+        }`,
+        value: `
+        TOPIC : ${obj.channels[index].topic.replace(/^(.{20}[^\s]*).*/, "$1")}...
+        🙍‍♂️ : ${obj.channels[index].num_all}
+        :speech_balloon: : ${obj.channels[index].num_speakers}
+        
+        ------------------------------------`,
+      });
+    } else {
+      continue;
+    }
+  }
+  return { embed };
+};
+
+exports.embeds_moive = (obj, type) => {
+  if (type == "sf") {
+    title = "SF Cinema City Robinson Kanchanaburi";
+    logo_url =
+      "https://lh3.googleusercontent.com/LhLoK1y-oVUXvievJsUU3lLpoxBGdsR8DD3AZy6WOmGZd19oJ5e3ugjTTgTL13jCYyxKY-956oNoDFFOS0Ab6w=s0";
+  } else {
+    title = "Major TMK Kanchanaburi";
+    logo_url =
+      "https://deepscope.com/setscope-include/images/TH/icon/MAJOR.jpg";
   }
   const embed = {
-    "title": 'รอบของวันนี้',
-    "thumbnail": {
-      "url": logo_url
+    title: "รอบของวันนี้",
+    thumbnail: {
+      url: logo_url,
     },
-    "color": 16590970,
-    "timestamp": n,
-    "author": {
-      "name": title
+    color: 16590970,
+    timestamp: n,
+    author: {
+      name: title,
     },
-    "fields": []
-  }
+    fields: [],
+  };
   for (let index = 0; index < obj.results.length; index++) {
-    word_round = ''
-    for (let index2 = 0; index2 < obj.results[index].showtimes.length; index2++) {
-      word_round = word_round + ' [' + obj.results[index].showtimes[index2]+ ']' 
+    word_round = "";
+    for (
+      let index2 = 0;
+      index2 < obj.results[index].showtimes.length;
+      index2++
+    ) {
+      word_round =
+        word_round + " [" + obj.results[index].showtimes[index2] + "]";
     }
     embed.fields.push({
-      "name": obj.results[index].movie_title+' ['+obj.results[index].movie_duration+' นาที]',
-      "value": word_round
-    })
+      name:
+        obj.results[index].movie_title +
+        " [" +
+        obj.results[index].movie_duration +
+        " นาที]",
+      value: word_round,
+    });
   }
 
   return {
-    embed
-  }
-})
+    embed,
+  };
+};
