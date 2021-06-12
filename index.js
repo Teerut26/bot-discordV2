@@ -235,7 +235,7 @@ client.on("message", async (message) => {
       message.channel.send("ต้องเปิด widget ของ server นี้ก่อน");
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
-    message.reply("Bot version 1.2.4// Last Update 07/06/2021");
+    message.reply("Bot version 1.2.5// Last Update 12/06/2021");
   } else if (message.content.match(/(\*google) (.*?) (.*)/gm)) {
     let re = /(\*google) (.*?) (.*)/gm;
     let command = message.content.replace(re, "$1");
@@ -423,9 +423,10 @@ client.on("message", async (message) => {
     } else {
       message.reply("ต้องมีคนอยู่ในห้องก่อน");
     }
-  } else if (message.content.match(/(\*ch) (.*)/g)) {
-    let re = /(\*ch) (.*)/g;
-    let content = message.content.replace(re, "$2");
+  } else if (message.content.match(/(\*ch)/g)) {
+    // let re = /(\*ch) (.*)/g;
+    let re = /(\*ch)/g;
+    // let content = message.content.replace(re, "$2");
     var config = {
       method: 'get',
       url: 'https://www.clubhouseapi.com/api/get_channels',
