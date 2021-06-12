@@ -423,38 +423,68 @@ client.on("message", async (message) => {
     } else {
       message.reply("ต้องมีคนอยู่ในห้องก่อน");
     }
-  } else if (message.content.match(/(\*ch)/g)) {
-    // let re = /(\*ch) (.*)/g;
-    let re = /(\*ch)/g;
-    // let content = message.content.replace(re, "$2");
+  } else if (message.content === "*ch") {
     var config = {
-      method: 'get',
-      url: 'https://www.clubhouseapi.com/api/get_channels',
-      headers: { 
-        'Host': 'www.clubhouseapi.com', 
-        'accept': 'application/json', 
-        'user-agent': 'clubhouse/android/2090', 
-        'ch-appbuild': '2090', 
-        'ch-appversion': '0.1.5', 
-        'ch-deviceid': '4aa872ec-6082-4dfc-b1fb-b3bbfc441c04', 
-        'ch-locale': 'th_TH', 
-        'ch-languages': 'th-TH', 
-        'ch-keyboards': '', 
-        'ch-session-id': '01991c3a-9ab6-413d-8e6f-aabe8c913e3f', 
-        'ch-userid': '826575048', 
-        'authorization': 'Token a4efadc86d43e8595fc2635983ebd672e29a1d46', 
-        'accept-encoding': 'gzip'
-      }
+      method: "get",
+      url: "https://www.clubhouseapi.com/api/get_channels",
+      headers: {
+        Host: "www.clubhouseapi.com",
+        accept: "application/json",
+        "user-agent": "clubhouse/android/2090",
+        "ch-appbuild": "2090",
+        "ch-appversion": "0.1.5",
+        "ch-deviceid": "4aa872ec-6082-4dfc-b1fb-b3bbfc441c04",
+        "ch-locale": "th_TH",
+        "ch-languages": "th-TH",
+        "ch-keyboards": "",
+        "ch-session-id": "01991c3a-9ab6-413d-8e6f-aabe8c913e3f",
+        "ch-userid": "826575048",
+        authorization: "Token a4efadc86d43e8595fc2635983ebd672e29a1d46",
+        "accept-encoding": "gzip",
+      },
     };
-    
-    axios(config)
-    .then(function (response) {
-      message.channel.send(modules_embeds.embeds_clubhouse(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
 
+    axios(config)
+      .then(function (response) {
+        message.channel.send(modules_embeds.embeds_clubhouse(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  } else if (message.content.match(/(\*ch) (.*)/g)) {
+    // let re = /(\*ch) (.*)/g;
+    let re = /(\*ch) (.*)/g;
+    let content = message.content.replace(re, "$2");
+    console.log(content)
+    if (content === "events") {
+      var config = {
+        method: 'get',
+        url: 'https://www.clubhouseapi.com/api/get_events?is_filtered=true&page=1&page_size=25',
+        headers: { 
+          'Host': 'www.clubhouseapi.com', 
+          'accept': 'application/json', 
+          'user-agent': 'clubhouse/android/2090', 
+          'ch-appbuild': '2090', 
+          'ch-appversion': '0.1.5', 
+          'ch-deviceid': '4aa872ec-6082-4dfc-b1fb-b3bbfc441c04', 
+          'ch-locale': 'th_TH', 
+          'ch-languages': 'th-TH', 
+          'ch-keyboards': '', 
+          'ch-session-id': '2e32870d-ccea-4cb8-aa2f-f57d0d7865d0', 
+          'ch-userid': '826575048', 
+          'authorization': 'Token a4efadc86d43e8595fc2635983ebd672e29a1d46', 
+          'accept-encoding': 'gzip'
+        }
+      };
+
+      axios(config)
+        .then(function (response) {
+          message.channel.send(modules_embeds.embeds_clubhouse_comming(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   } else {
     message.channel.send("คุณต้องป้อนคำสั่งที่ถูกต้อง!");
   }

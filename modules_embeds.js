@@ -519,7 +519,11 @@ exports.embeds_help = () => {
       },
       {
         name: "*ch",
-        value: "ดู cub ของ clubhouse : *ch",
+        value: "ดู cub ใน clubhouse : *ch",
+      },
+      {
+        name: "*ch events",
+        value: "ดู events ใน clubhouse : *ch events",
       },
       {
         name: "*botv",
@@ -549,15 +553,39 @@ exports.embeds_clubhouse = (obj) => {
           obj.channels[index].club ? obj.channels[index].club.name : "null"
         }`,
         value: `
-        TOPIC : ${obj.channels[index].topic.replace(/^(.{50}[^\s]*).*/, "$1")}...
-        🙍‍♂️ : ${obj.channels[index].num_all}
-        :speech_balloon: : ${obj.channels[index].num_speakers}
-        [link](${obj.channels[index].url})
-        ------------------------------------`,
+        TOPIC : ${obj.channels[index].topic}
+🙍‍♂️ : ${obj.channels[index].num_all}
+:speech_balloon: : ${obj.channels[index].num_speakers}
+[link](${obj.channels[index].url})
+------------------------------------`,
       });
     } else {
       continue;
     }
+  }
+  return { embed };
+};
+
+exports.embeds_clubhouse_comming = (obj) => {
+  console.log(obj)
+  const embed = {
+    title: "Clubhouse Comming Events",
+    thumbnail: {
+      url: "https://play-lh.googleusercontent.com/GUMEenmbv0KoghJvUn0tTouMKf-7oO26fhH1LzfeAGQY2fylgK_Oh5OD3DFCg-SqKA0",
+    },
+    color: 16590970,
+    timestamp: n,
+    fields: [],
+  };
+  for (let index = 0; index < 5; index++) {
+      embed.fields.push({
+        name: `Name : ${obj.events[index].name}`,
+        value: `
+        Description : ${obj.events[index].description.replace(/^(.{50}[^\s]*).*/, "$1")}
+TimeStart : ${new Date(obj.events[index].time_start).toLocaleString("th-TH")}
+[link](${obj.events[index].url})
+---------------------------------------------`,
+      });
   }
   return { embed };
 };
