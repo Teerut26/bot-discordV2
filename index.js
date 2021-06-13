@@ -11,6 +11,7 @@ var queue = new Map();
 var modules_basic = require("./modules_basic.js");
 var modules_embeds = require("./modules_embeds.js");
 var modules_web = require("./modules_web.js");
+var modules_generator = require("./modules_generator_image.js");
 
 require("./modules_web.js");
 // const modules_player = require('./modules_player')
@@ -183,25 +184,15 @@ client.on("message", async (message) => {
     // );
     message.channel.send(modules_embeds.embeds_help());
   } else if (message.content.startsWith(`${prefix}covid`)) {
-    axios
-      .get("https://covid19.th-stat.com/api/open/today")
-      .then((res) => {
-        message.channel.send(modules_embeds.embeds_covid(res.data));
-        // message.channel.send(
-        //     'Confirmed : ' + modules_basic.commaSeparateNumber(res.data.Confirmed) + '\n' +
-        //     'Recovered : ' + modules_basic.commaSeparateNumber(res.data.Recovered) + '\n' +
-        //     'Hospitalized : ' + modules_basic.commaSeparateNumber(res.data.Hospitalized) + '\n' +
-        //     'Deaths : ' + modules_basic.commaSeparateNumber(res.data.Deaths) + '\n' +
-        //     'NewConfirmed : ' + modules_basic.commaSeparateNumber(res.data.NewConfirmed) + '\n' +
-        //     'NewRecovered : ' + modules_basic.commaSeparateNumber(res.data.NewRecovered) + '\n' +
-        //     'NewHospitalized : ' + modules_basic.commaSeparateNumber(res.data.NewHospitalized) + '\n' +
-        //     'NewDeaths : ' + modules_basic.commaSeparateNumber(res.data.NewDeaths) + '\n' +
-        //     'UpdateDate : ' + res.data.UpdateDate + '\n'
-        // );
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    modules_generator.covid(message,"s")
+    // axios
+    //   .get("https://covid19.th-stat.com/api/open/today")
+    //   .then((res) => {
+    //     message.channel.send(modules_embeds.embeds_covid(res.data));
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   } else if (message.content.startsWith(`${prefix}crypto`)) {
     let baseUrl = "https://api.bitkub.com";
     axios
@@ -226,7 +217,8 @@ client.on("message", async (message) => {
           "https://discord.com/api/guilds/" + message.guild.id + "/widget.json"
         )
         .then((res) => {
-          message.channel.send(modules_embeds.embeds_user_online(res.data));
+          modules_generator.user_online(message,res.data);
+          // message.channel.send(modules_embeds.embeds_user_online(res.data));
         })
         .catch(function (error) {
           console.log(error);
@@ -235,7 +227,7 @@ client.on("message", async (message) => {
       message.channel.send("ต้องเปิด widget ของ server นี้ก่อน");
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
-    message.reply("Bot version 1.2.5// Last Update 12/06/2021");
+    message.reply("Bot version 1.2.6// Last Update 13/06/2021");
   } else if (message.content.match(/(\*google) (.*?) (.*)/gm)) {
     let re = /(\*google) (.*?) (.*)/gm;
     let command = message.content.replace(re, "$1");
@@ -485,6 +477,8 @@ client.on("message", async (message) => {
           console.log(error);
         });
     }
+  } else if (message.content === "*test"){
+    modules_generator.test1(message,"sfds");
   } else {
     message.channel.send("คุณต้องป้อนคำสั่งที่ถูกต้อง!");
   }
