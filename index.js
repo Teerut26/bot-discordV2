@@ -184,7 +184,7 @@ client.on("message", async (message) => {
     // );
     message.channel.send(modules_embeds.embeds_help());
   } else if (message.content.startsWith(`${prefix}covid`)) {
-    modules_generator.covid(message,"s")
+    modules_generator.covid(message, "s");
     // axios
     //   .get("https://covid19.th-stat.com/api/open/today")
     //   .then((res) => {
@@ -217,7 +217,7 @@ client.on("message", async (message) => {
           "https://discord.com/api/guilds/" + message.guild.id + "/widget.json"
         )
         .then((res) => {
-          modules_generator.user_online(message,res.data);
+          modules_generator.user_online(message, res.data);
           // message.channel.send(modules_embeds.embeds_user_online(res.data));
         })
         .catch(function (error) {
@@ -447,38 +447,50 @@ client.on("message", async (message) => {
     // let re = /(\*ch) (.*)/g;
     let re = /(\*ch) (.*)/g;
     let content = message.content.replace(re, "$2");
-    console.log(content)
+    console.log(content);
     if (content === "events") {
       var config = {
-        method: 'get',
-        url: 'https://www.clubhouseapi.com/api/get_events?is_filtered=true&page=1&page_size=25',
-        headers: { 
-          'Host': 'www.clubhouseapi.com', 
-          'accept': 'application/json', 
-          'user-agent': 'clubhouse/android/2090', 
-          'ch-appbuild': '2090', 
-          'ch-appversion': '0.1.5', 
-          'ch-deviceid': '4aa872ec-6082-4dfc-b1fb-b3bbfc441c04', 
-          'ch-locale': 'th_TH', 
-          'ch-languages': 'th-TH', 
-          'ch-keyboards': '', 
-          'ch-session-id': '2e32870d-ccea-4cb8-aa2f-f57d0d7865d0', 
-          'ch-userid': '826575048', 
-          'authorization': 'Token a4efadc86d43e8595fc2635983ebd672e29a1d46', 
-          'accept-encoding': 'gzip'
-        }
+        method: "get",
+        url: "https://www.clubhouseapi.com/api/get_events?is_filtered=true&page=1&page_size=25",
+        headers: {
+          Host: "www.clubhouseapi.com",
+          accept: "application/json",
+          "user-agent": "clubhouse/android/2090",
+          "ch-appbuild": "2090",
+          "ch-appversion": "0.1.5",
+          "ch-deviceid": "4aa872ec-6082-4dfc-b1fb-b3bbfc441c04",
+          "ch-locale": "th_TH",
+          "ch-languages": "th-TH",
+          "ch-keyboards": "",
+          "ch-session-id": "2e32870d-ccea-4cb8-aa2f-f57d0d7865d0",
+          "ch-userid": "826575048",
+          authorization: "Token a4efadc86d43e8595fc2635983ebd672e29a1d46",
+          "accept-encoding": "gzip",
+        },
       };
 
       axios(config)
         .then(function (response) {
-          message.channel.send(modules_embeds.embeds_clubhouse_comming(response.data));
+          message.channel.send(
+            modules_embeds.embeds_clubhouse_comming(response.data)
+          );
         })
         .catch(function (error) {
           console.log(error);
         });
     }
-  } else if (message.content === "*test"){
-    modules_generator.test1(message,"sfds");
+  } else if (message.content === "*test") {
+    modules_generator.test1(message, "sfds");
+  } else if (message.content === "*tor") {
+    if (message.author.id === "574806737253826571") {
+      let word = ["โคตรเท่", "เยด เยด พี่ต่อมีพลังว่ะ", "โก้มากพี่ต่อ"];
+      let numberRandom = Math.floor(Math.random() * 3);
+      message.reply(word[numberRandom]);
+    } else {
+      let word = ["มึงเป็นควยไร", "ไอหน้าหีอย่าเสือก", "ไอเหี้ยนี่ขี้เสือกจังวะ"];
+      let numberRandom = Math.floor(Math.random() * 3);
+      message.reply(word[numberRandom]);
+    }
   } else {
     message.channel.send("คุณต้องป้อนคำสั่งที่ถูกต้อง!");
   }
