@@ -71,51 +71,30 @@ exports.embeds_play_v2 = (obj) => {
 
 exports.embeds_covid = (obj) => {
   const embed = {
-    title: "Covid In Thailand",
+    title: "🇹🇭 สถานการณ์ในประเทศไทย 🇹🇭",
     color: 16711680,
-    timestamp: n,
     footer: {
-      text: "UpdateDate :" + obj.UpdateDate,
+      text: `${obj.Date} • ${obj.Time}`,
     },
     fields: [
       {
-        name: "Confirmed",
-        value: modules_basic.commaSeparateNumber(obj.Confirmed),
+        name: "สะสม",
+        value: obj.Confirmed,
         inline: true,
       },
       {
-        name: "Recovered",
-        value: modules_basic.commaSeparateNumber(obj.Recovered),
+        name: "รายใหม่",
+        value: obj.NewConfirmed,
         inline: true,
       },
       {
-        name: "Hospitalized",
-        value: modules_basic.commaSeparateNumber(obj.Hospitalized),
+        name: "อาการรุนแรง",
+        value: obj.Severe,
         inline: true,
       },
       {
-        name: "Deaths",
-        value: modules_basic.commaSeparateNumber(obj.Deaths),
-        inline: true,
-      },
-      {
-        name: "NewConfirmed",
-        value: modules_basic.commaSeparateNumber(obj.NewConfirmed),
-        inline: true,
-      },
-      {
-        name: "NewRecovered",
-        value: modules_basic.commaSeparateNumber(obj.NewRecovered),
-        inline: true,
-      },
-      {
-        name: "NewHospitalized",
-        value: modules_basic.commaSeparateNumber(obj.NewHospitalized),
-        inline: true,
-      },
-      {
-        name: "NewDeaths",
-        value: modules_basic.commaSeparateNumber(obj.NewDeaths),
+        name: "เสียชีวิต",
+        value: obj.Dead,
         inline: true,
       },
     ],
@@ -487,7 +466,7 @@ exports.embeds_help = () => {
       },
       {
         name: "*twitter",
-        value: "ดู trending ใน twitter : *twitter [now][1d][7d][30d][year]",
+        value: "ดู trending ใน twitter : *twitter [day][week][month][year]",
       },
       {
         name: "*cinema",

@@ -47,6 +47,8 @@ exports.commaSeparateNumber = ((val) => {
     return val2;
 })
 
+
+
 // exports.commaSeparateNumber = function (val) {
 //     var val2 = parseInt(val)
 //     while (/(\d+)(\d{3})/.test(val2.toString())) {

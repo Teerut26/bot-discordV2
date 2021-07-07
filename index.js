@@ -7,11 +7,14 @@ const QRCode = require("qrcode");
 var fs = require("fs");
 const client = new Discord.Client();
 
+const cheerio = require("cheerio");
+
 var queue = new Map();
 var modules_basic = require("./modules_basic.js");
 var modules_embeds = require("./modules_embeds.js");
 var modules_web = require("./modules_web.js");
 var modules_generator = require("./modules_generator_image.js");
+var modules = require("./modules.js");
 
 require("./modules_web.js");
 // const modules_player = require('./modules_player')
@@ -184,15 +187,8 @@ client.on("message", async (message) => {
     // );
     message.channel.send(modules_embeds.embeds_help());
   } else if (message.content.startsWith(`${prefix}covid`)) {
-    modules_generator.covid(message, "s");
-    // axios
-    //   .get("https://covid19.th-stat.com/api/open/today")
-    //   .then((res) => {
-    //     message.channel.send(modules_embeds.embeds_covid(res.data));
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+    modules.covid(message)
+    
   } else if (message.content.startsWith(`${prefix}crypto`)) {
     let baseUrl = "https://api.bitkub.com";
     axios
@@ -332,25 +328,35 @@ client.on("message", async (message) => {
   } else if (message.content.match(/(\*twitter) (.*)/g)) {
     let re = /(\*twitter) (.*)/g;
     let content = message.content.replace(re, "$2");
-    axios
-      .get(
-        "https://api-vue-sv1.herokuapp.com/twitter/trending/thailand/" + content
-      )
-      .then((res) => {
-        message.channel.send(modules_embeds.embeds_twitter(res.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    modules.twitter(content).then((data) => {
+      const $ = cheerio.load(data);
+      const result = Array.from(
+          $(
+            "#tab-day > div > table.table.table-hover.text-left.clickable.ranking.top.mb-0 > tbody > tr"
+          )
+        ).map((element) => ({
+          index: $(element).find("tr > th").html(),
+          hastag: $(element).find("td.main > a").html(),
+          tweets: $(element).find("td:nth-child(3)").html(),
+          record: $(element).find("td:nth-child(4)").html(),
+        })) || [];
+        message.channel.send(modules_embeds.embeds_twitter(result));
+    })
   } else if (message.content.match(/(\*twitter)/g)) {
-    axios
-      .get("https://api-vue-sv1.herokuapp.com/twitter/trending/thailand/1d")
-      .then((res) => {
-        message.channel.send(modules_embeds.embeds_twitter(res.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    modules.twitter("day").then((data) => {
+      const $ = cheerio.load(data);
+      const result = Array.from(
+          $(
+            "#tab-day > div > table.table.table-hover.text-left.clickable.ranking.top.mb-0 > tbody > tr"
+          )
+        ).map((element) => ({
+          index: $(element).find("tr > th").html(),
+          hastag: $(element).find("td.main > a").html(),
+          tweets: $(element).find("td:nth-child(3)").html(),
+          record: $(element).find("td:nth-child(4)").html(),
+        })) || [];
+        message.channel.send(modules_embeds.embeds_twitter(result));
+    })
   } else if (message.content.match(/(\*qr) (.*)/g)) {
     let re = /(\*qr) (.*)/g;
     let content = message.content.replace(re, "$2");
