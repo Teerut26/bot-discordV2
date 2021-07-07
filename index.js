@@ -223,7 +223,7 @@ client.on("message", async (message) => {
       message.channel.send("ต้องเปิด widget ของ server นี้ก่อน");
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
-    message.reply("Bot version 1.2.6// Last Update 13/06/2021");
+    message.reply("Bot version 1.2.7// Last Update 7/07/2021");
   } else if (message.content.match(/(\*google) (.*?) (.*)/gm)) {
     let re = /(\*google) (.*?) (.*)/gm;
     let command = message.content.replace(re, "$1");
