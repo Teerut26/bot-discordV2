@@ -453,8 +453,8 @@ exports.embeds_help = () => {
         value: "หยุดเพลง",
       },
       {
-        name: "*google",
-        value: "เสียง Google : *google th สวัสดี",
+        name: "*g",
+        value: "เสียง Google : *g th สวัสดี",
       },
       {
         name: "*crypto",

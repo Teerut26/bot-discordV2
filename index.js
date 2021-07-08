@@ -224,12 +224,12 @@ client.on("message", async (message) => {
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
     message.reply("Bot version 1.2.7// Last Update 7/07/2021");
-  } else if (message.content.match(/(\*google) (.*?) (.*)/gm)) {
-    let re = /(\*google) (.*?) (.*)/gm;
+  } else if (message.content.match(/(\*g) (.*?) (.*)/gm)) {
+    let re = /(\*g) (.*?) (.*)/gm;
     let command = message.content.replace(re, "$1");
     let code = message.content.replace(re, "$2");
     let content = message.content.replace(re, "$3");
-    if (command === "*google") {
+    if (command === "*g") {
       if (message.member.voice.channel) {
         const connection = await message.member.voice.channel.join();
         connection.play(
@@ -244,11 +244,11 @@ client.on("message", async (message) => {
         message.reply("ต้องมีคนอยู่ในห้องก่อน");
       }
     }
-  } else if (message.content.match(/(\*google) (.*)/g)) {
-    let re = /(\*google) (.*)/g;
+  } else if (message.content.match(/(\*g) (.*)/g)) {
+    let re = /(\*g) (.*)/g;
     let command = message.content.replace(re, "$1");
     let content = message.content.replace(re, "$2");
-    if (command === "*google") {
+    if (command === "*g") {
       if (message.member.voice.channel) {
         const connection = await message.member.voice.channel.join();
         connection.play(
