@@ -4,6 +4,10 @@ var modules_basic = require("./modules_basic.js");
 var d = new Date();
 var n = d.toJSON();
 
+const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 exports.embeds_play = (obj) => {
   // console.log(obj)
   const exampleEmbed = new Discord.MessageEmbed()
@@ -74,27 +78,32 @@ exports.embeds_covid = (obj) => {
     title: "🇹🇭 สถานการณ์ในประเทศไทย 🇹🇭",
     color: 16711680,
     footer: {
-      text: `${obj.Date} • ${obj.Time}`,
+      "icon_url": "https://yt3.ggpht.com/ytc/AKedOLQNaerSIv-ZT47edbqfJzVwPV4SxTwo7rZDRjIbV3s",
+      text: `${(new Date(obj.Date*1000)).toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })} • ${(new Date(obj.Date*1000)).toLocaleTimeString('th-TH')}`
     },
     fields: [
       {
         name: "สะสม",
-        value: obj.Confirmed,
+        value: numberWithCommas(obj.Confirmed),
         inline: true,
       },
       {
         name: "รายใหม่",
-        value: obj.NewConfirmed,
+        value: numberWithCommas(obj.NewConfirmed),
         inline: true,
       },
       {
-        name: "อาการรุนแรง",
-        value: obj.Severe,
+        name: "หายแล้ว",
+        value: numberWithCommas(obj.Recovered),
         inline: true,
       },
       {
         name: "เสียชีวิต",
-        value: obj.Dead,
+        value: numberWithCommas(obj.Dead),
         inline: true,
       },
     ],
@@ -611,6 +620,25 @@ exports.embeds_moive = (obj, type) => {
     });
   }
 
+  return {
+    embed,
+  };
+};
+
+
+exports.embeds_visut = (obj) => {
+  const embed = {
+    title: "Visut News",
+    color: 16711680,
+    timestamp: n,
+    thumbnail: {
+      url: "https://upload.wikimedia.org/wikipedia/th/3/37/Visut_logo.png",
+    },
+    // "footer": {
+    //   "text": "UpdateDate :" + obj.UpdateDate
+    // },
+    fields: obj,
+  };
   return {
     embed,
   };

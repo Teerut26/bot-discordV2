@@ -168,23 +168,6 @@ client.on("message", async (message) => {
   } else if (message.content.startsWith(`${prefix}musiclist`)) {
     message.channel.send(modules_embeds.embeds_music_list(musicList));
   } else if (message.content.startsWith(`${prefix}help`)) {
-    // message.channel.send(
-    //     'คำสั่ง\n' +
-    //     // ':musical_note:\n' +
-    //     '/play <YOUTUBE URL>\n' +
-    //     '/skip\n' +
-    //     '/stop\n' +
-    //     // ':loudspeaker:\n' +
-    //     '/google <ISO-3166-code> <word>\n' +
-    //     '/google <word>\n' +
-    //     // ':radioactive:\n' +
-    //     '/covid\n' +
-    //     // ':hash:\n' +
-    //     '/twitter [now][1d][7d][30d][year]\n' +
-    //     '/botv\n' +
-    //     '/musiclist\n' +
-    //     '/useronline\n'
-    // );
     message.channel.send(modules_embeds.embeds_help());
   } else if (message.content.startsWith(`${prefix}covid`)) {
     modules.covid(message)
@@ -224,7 +207,9 @@ client.on("message", async (message) => {
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
     message.reply("Bot version 1.2.7// Last Update 7/07/2021");
-  } else if (message.content.match(/(\*g) (.*?) (.*)/gm)) {
+  } else if (message.content.startsWith(`${prefix}visut`)) {
+    modules.visut(message)
+  }else if (message.content.match(/(\*g) (.*?) (.*)/gm)) {
     let re = /(\*g) (.*?) (.*)/gm;
     let command = message.content.replace(re, "$1");
     let code = message.content.replace(re, "$2");
@@ -286,7 +271,12 @@ client.on("message", async (message) => {
           );
         });
     }
-  } else if (message.content.match(/(\*urls) (.*)/g)) {
+  }  else if (message.content.match(/(\*chart)/g)) {
+    let re = /(\*chart)/g;
+    let content = message.content.replace(re, "$2");
+    modules.chart(message)
+   
+  }else if (message.content.match(/(\*urls) (.*)/g)) {
     let re = /(\*urls) (.*)/g;
     let content = message.content.replace(re, "$2");
     var data = "url=" + encodeURIComponent(content);
