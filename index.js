@@ -135,23 +135,23 @@ client.on("message", async (message) => {
   //     .then(updated => console.log(`New guild name ${updated} in region`))
   //     .catch(console.error);
   // await console.log(queue.get(message.guild.id))
-  let default_time = new Date().toLocaleString("en-US", {
-    timeZone: "Asia/Bangkok",
-  });
-  let now = new Date(default_time);
+  // let default_time = new Date().toLocaleString("en-US", {
+  //   timeZone: "Asia/Bangkok",
+  // });
+  // let now = new Date(default_time);
 
-  await fs.appendFile(
-    "log.txt",
-    `[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}][${now.getDate()}/${
-      now.getMonth() + 1
-    }/${now.getFullYear()}][${message.guild.name}][${message.channel.name}][${
-      message.author.username
-    }] ${JSON.stringify(message.content)}\n`,
-    function (err) {
-      if (err) throw err;
-      console.log("Saved!");
-    }
-  );
+  // await fs.appendFile(
+  //   "log.txt",
+  //   `[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}][${now.getDate()}/${
+  //     now.getMonth() + 1
+  //   }/${now.getFullYear()}][${message.guild.name}][${message.channel.name}][${
+  //     message.author.username
+  //   }] ${JSON.stringify(message.content)}\n`,
+  //   function (err) {
+  //     if (err) throw err;
+  //     console.log("Saved!");
+  //   }
+  // );
 
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
@@ -173,7 +173,7 @@ client.on("message", async (message) => {
     message.channel.send(modules_embeds.embeds_help());
   } else if (message.content.startsWith(`${prefix}covid`)) {
     modules.covid(message)
-    modules.chart_vaccination(message)
+    // modules.chart_vaccination(message)
   } else if (message.content.startsWith(`${prefix}crypto`)) {
     let baseUrl = "https://api.bitkub.com";
     axios
@@ -199,8 +199,8 @@ client.on("message", async (message) => {
           "https://discord.com/api/guilds/" + message.guild.id + "/widget.json"
         )
         .then((res) => {
-          modules_generator.user_online(message, res.data);
-          // message.channel.send(modules_embeds.embeds_user_online(res.data));
+          // modules_generator.user_online(message, res.data);
+          message.channel.send(modules_embeds.embeds_user_online(res.data));
         })
         .catch(function (error) {
           console.log(error);
