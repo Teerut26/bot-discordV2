@@ -405,6 +405,7 @@ exports.embeds_user_online = (obj) => {
     embed.fields.push({
       name: index + 1 + ". " + obj.members[index].username,
       value: member_status,
+      inline: true
     });
   }
   return {

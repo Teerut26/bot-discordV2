@@ -1,8 +1,10 @@
 const Discord = require("discord.js");
+
 const { prefix, token } = require("./config.json");
 const ytdl = require("ytdl-core");
 const axios = require("axios");
 const QRCode = require("qrcode");
+
 
 var fs = require("fs");
 const client = new Discord.Client();
@@ -171,7 +173,7 @@ client.on("message", async (message) => {
     message.channel.send(modules_embeds.embeds_help());
   } else if (message.content.startsWith(`${prefix}covid`)) {
     modules.covid(message)
-    
+    modules.chart_vaccination(message)
   } else if (message.content.startsWith(`${prefix}crypto`)) {
     let baseUrl = "https://api.bitkub.com";
     axios
@@ -183,6 +185,7 @@ client.on("message", async (message) => {
         console.log(error);
       });
   } else if (message.content.startsWith(`${prefix}useronline`)) {
+    console.log("useronline");
     var widget_enabled;
     await message.guild
       .fetchWidget()

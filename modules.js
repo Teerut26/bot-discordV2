@@ -2,6 +2,8 @@ var modules_embeds = require("./modules_embeds.js");
 const axios = require("axios");
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
 const cheerio = require("cheerio");
+const ChartJSImage = require("chart.js-image");
+const { MessageAttachment } = require("discord.js");
 const width = 400;
 const height = 400;
 
@@ -13,49 +15,6 @@ exports.twitter = async (time) => {
   return await data;
 };
 
-// exports.covid = (message) => {
-//   const cheerio = require("cheerio");
-//   const axios = require("axios");
-
-//   const get_data = async () => {
-//     var res = await axios.get(
-//       "https://ddc.moph.go.th/viralpneumonia/index.php"
-//     );
-//     var data = await res.data;
-//     return await data;
-//   };
-//   // $("body > div.banner-section.spad > div > div:nth-child(1) > div.col-lg-6 > div > div")
-//   get_data().then((data) => {
-//     const $ = cheerio.load(data);
-//     let Confirmed = $(
-//       "body > div.banner-section.spad > div > div:nth-child(1) > div.col-lg-6 > div > div > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div > h4"
-//     ).html();
-//     let NewConfirmed = $(
-//       "body > div.banner-section.spad > div > div:nth-child(1) > div.col-lg-6 > div > div > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(1) > div > h4"
-//     ).html();
-//     let Severe = $(
-//       "body > div.banner-section.spad > div > div:nth-child(1) > div.col-lg-6 > div > div > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(2) > div > h4"
-//     ).html();
-//     let Dead = $(
-//       "body > div.banner-section.spad > div > div:nth-child(1) > div.col-lg-6 > div > div > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(3) > div > h4"
-//     ).html();
-//     let Date = $(
-//       "body > div.banner-section.spad > div > div:nth-child(1) > div.col-lg-6 > div > div > div:nth-child(2) > div:nth-child(1) > div > div"
-//     ).html();
-//     let Time = $(
-//         "body > div.banner-section.spad > div > div:nth-child(1) > div.col-lg-6 > div > div > div:nth-child(2) > div:nth-child(2) > div > div"
-//       ).html();
-//     message.channel.send(modules_embeds.embeds_covid({
-//         Confirmed,
-//         NewConfirmed,
-//         Severe,
-//         Dead,
-//         Date,
-//         Time
-//     }))
-//   });
-// };
-
 exports.covid = async (message) => {
   var res = await axios.get(
     `https://s.isanook.com/sh/0/covid_2019/data.json?${new Date().getTime(
@@ -63,84 +22,230 @@ exports.covid = async (message) => {
     )}`
   );
   var data = await res.data;
-  console.log(data);
   message.channel.send(
     modules_embeds.embeds_covid({
       Confirmed: data.thai.total_cases,
       NewConfirmed: data.thai.new_cases,
       Recovered: data.thai.recovered,
       Dead: data.thai.deaths,
-      Date:data.date
+      Date: data.date,
     })
   );
 };
 
-exports.chart = (message) => {
-  const chartCallback = (ChartJS) => {
-    // Global config example: https://www.chartjs.org/docs/latest/configuration/
-    ChartJS.defaults.global.elements.rectangle.borderWidth = 2;
-    // Global plugin example: https://www.chartjs.org/docs/latest/developers/plugins.html
-    ChartJS.plugins.register({
-      // plugin implementation
-    });
-    // New chart type example: https://www.chartjs.org/docs/latest/developers/charts.html
-    ChartJS.controllers.MyType = ChartJS.DatasetController.extend({
-      // chart implementation
-    });
-  };
+exports.chart_thailand = async (message) => {
+  let res1 = await axios.get(
+    `https://s.isanook.com/an/0/covid-19/static/data/thailand/daily/latest.json?${new Date().getTime()}`
+  );
+  let url_last_update = await res1.data.url;
+  let current_month = new Date().getMonth();
+
+  let res2 = await axios.get(url_last_update);
+  let data = await res2.data;
+  let lable = await data.data
+    .filter(
+      (date) =>
+        Number.parseInt(date.date.split("-")[0]) >= 2021 &&
+        Number.parseInt(date.date.split("-")[1]) >= current_month - 3
+    )
+    .map((date) => date.date);
+  let confirmed = await data.data
+    .filter(
+      (date) =>
+        Number.parseInt(date.date.split("-")[0]) >= 2021 &&
+        Number.parseInt(date.date.split("-")[1]) >= current_month - 3
+    )
+    .map((date) => date.confirmed);
+  let recovered = await data.data
+    .filter(
+      (date) =>
+        Number.parseInt(date.date.split("-")[0]) >= 2021 &&
+        Number.parseInt(date.date.split("-")[1]) >= current_month - 3
+    )
+    .map((date) => date.recovered);
+  let deaths = await data.data
+    .filter(
+      (date) =>
+        Number.parseInt(date.date.split("-")[0]) >= 2021 &&
+        Number.parseInt(date.date.split("-")[1]) >= current_month - 3
+    )
+    .map((date) => date.deaths);
+
+  const width = 2000; //px
+  const height = 900; //px
+  const backgroundColor = "white"; //backgroundColor
+
   const chartJSNodeCanvas = new ChartJSNodeCanvas({
     width,
     height,
-    chartCallback,
+    backgroundColor,
   });
 
-  (async () => {
-    const configuration = {
-      type: "bar",
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [
-          {
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
-            ],
-            borderColor: [
-              "rgba(255,99,132,1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
-            ],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-                callback: (value) => "$" + value,
-              },
-            },
-          ],
+  const plugin = {
+    id: "custom_canvas_background_color",
+    beforeDraw: (chart) => {
+      const ctx = chart.canvas.getContext("2d");
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, chart.width, chart.height);
+      ctx.restore();
+    },
+  };
+
+  const configuration = {
+    type: "line",
+    data: {
+      labels: lable,
+      datasets: [
+        {
+          label: "confirmed",
+          data: confirmed,
+          backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+          borderColor: ["rgba(255, 99, 132, 1)"],
+          borderWidth: 1,
+        },
+        {
+          label: "recovered",
+          data: recovered,
+          backgroundColor: ["rgba(54, 162, 235, 0.2)"],
+          borderColor: ["rgba(54, 162, 235, 1)"],
+          borderWidth: 1,
+        },
+        {
+          label: "deaths",
+          data: deaths,
+          backgroundColor: ["rgba(255, 206, 86, 0.2)"],
+          borderColor: ["rgba(255, 206, 86, 1)"],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
         },
       },
-    };
-    const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-    message.channel.send({ files: image });
-    // const dataUrl = await chartJSNodeCanvas.renderToDataURL(configuration);
-    // const stream = chartJSNodeCanvas.renderToStream(configuration);
-  })();
+      plugins: {
+        legend: {
+          labels: {
+            // This more specific font property overrides the global property
+            font: {
+              size: 30,
+            },
+          },
+        },
+        title: {
+          display: true,
+          text: `Update : ${res1.data.lastUpdated} Dev By : Teerut`,
+          font: {
+            size: 30,
+          },
+        },
+      },
+    },
+    plugins: [plugin],
+  };
+  const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+  message.channel.send(new MessageAttachment(image, `chart.png`));
+};
+
+exports.chart_vaccination = async (message) => {
+  let res1 = await axios.get(
+    `https://s.isanook.com/an/0/covid-19/static/data/thailand/vaccination/latest.json?${new Date().getTime()}`
+  );
+  let url_last_update = await res1.data.url;
+  let current_month = new Date().getMonth();
+
+  let res2 = await axios.get(url_last_update);
+  let data = await res2.data;
+  let lable = await data.data[0].timelineData.map((item) => item.date);
+  let dors_all = await data.data[0].timelineData.map((item) => item.number);
+  let dors1 = await data.data[1].timelineData.map((item) => item.number);
+  let dors2 = await data.data[2].timelineData.map((item) => item.number);
+  // let confirmed = await data.data.map((date) => date.confirmed);
+  // let recovered = await data.data.map((date) => date.recovered);
+  // let deaths = await data.data.map((date) => date.deaths);
+
+  const width = 2000; //px
+  const height = 900; //px
+  const backgroundColor = "white"; //backgroundColor
+
+  const chartJSNodeCanvas = new ChartJSNodeCanvas({
+    width,
+    height,
+    backgroundColor,
+  });
+
+  const plugin = {
+    id: "custom_canvas_background_color",
+    beforeDraw: (chart) => {
+      const ctx = chart.canvas.getContext("2d");
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, chart.width, chart.height);
+      ctx.restore();
+    },
+  };
+
+  const configuration = {
+    type: "line",
+    data: {
+      labels: lable,
+      datasets: [
+        {
+          label: "จำนวนโดสที่ฉีดไปแล้ว",
+          data: dors_all,
+          backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+          borderColor: ["rgba(255, 99, 132, 1)"],
+          borderWidth: 1,
+        },
+        {
+          label: "เข็มที่ 1",
+          data: dors1,
+          backgroundColor: ["rgba(54, 162, 235, 0.2)"],
+          borderColor: ["rgba(54, 162, 235, 1)"],
+          borderWidth: 1,
+        },
+        {
+          label: "เข็มที่ 2",
+          data: dors2,
+          backgroundColor: ["rgba(255, 206, 86, 0.2)"],
+          borderColor: ["rgba(255, 206, 86, 1)"],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            // This more specific font property overrides the global property
+            font: {
+              size: 30,
+            },
+          },
+        },
+        title: {
+          display: true,
+          text: `Vaccination : ${res1.data.lastUpdated} Dev By : Teerut`,
+          font: {
+            size: 30,
+          },
+        },
+      },
+    },
+    plugins: [plugin],
+  };
+  const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+  message.channel.send(new MessageAttachment(image, `chart.png`));
 };
 
 exports.visut = async (message) => {
@@ -175,5 +280,5 @@ exports.visut = async (message) => {
     });
   }
   // console.log(obj)
-  message.channel.send(modules_embeds.embeds_visut(obj))
+  message.channel.send(modules_embeds.embeds_visut(obj));
 };

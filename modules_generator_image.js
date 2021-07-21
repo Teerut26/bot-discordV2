@@ -136,6 +136,7 @@ exports.user_online = async (msg, obj) => {
     encoding: "buffer",
   });
   // for more configuration options refer to the library
+  console.log(images)
 
   return msg.channel.send(new MessageAttachment(images, `12.png`));
 };
@@ -622,6 +623,7 @@ exports.covid = async (msg, obj) => {
     encoding: "buffer",
   });
   // for more configuration options refer to the library
+  
 
   return msg.channel.send(new MessageAttachment(images, `covid.png`));
 };
