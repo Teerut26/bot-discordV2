@@ -209,7 +209,7 @@ client.on("message", async (message) => {
       message.channel.send("ต้องเปิด widget ของ server นี้ก่อน");
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
-    message.reply("Bot version 1.2.7// Last Update 7/07/2021");
+    message.reply("Bot version 1.2.9// Last Update 21/07/2021");
   } else if (message.content.startsWith(`${prefix}visut`)) {
     modules.visut(message)
   }else if (message.content.match(/(\*g) (.*?) (.*)/gm)) {
