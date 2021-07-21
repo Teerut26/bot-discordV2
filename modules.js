@@ -6,7 +6,7 @@ const ChartJSImage = require("chart.js-image");
 const { MessageAttachment } = require("discord.js");
 const width = 400;
 const height = 400;
-const utf8 = require('utf8');
+const utf8 = require("utf8");
 
 exports.twitter = async (time) => {
   var res = await axios.get(
@@ -32,8 +32,8 @@ exports.covid = async (message) => {
       Date: data.date,
     })
   );
-  chart_thailand(message)
-  chart_vaccination(message)
+  await chart_thailand(message);
+  await chart_vaccination(message);
 };
 
 chart_thailand = async (message) => {
@@ -130,6 +130,9 @@ chart_thailand = async (message) => {
           beginAtZero: true,
         },
       },
+      layout: {
+        padding: 40,
+      },
       plugins: {
         legend: {
           labels: {
@@ -199,21 +202,21 @@ chart_vaccination = async (message) => {
       labels: lable,
       datasets: [
         {
-          label: utf8.decode(utf8.encode("จำนวนโดสที่ฉีดไปแล้ว")),
+          label: "Dose All",
           data: dors_all,
           backgroundColor: ["rgba(255, 99, 132, 0.2)"],
           borderColor: ["rgba(255, 99, 132, 1)"],
           borderWidth: 1,
         },
         {
-          label: utf8.decode(utf8.encode("เข็มที่ 1")),
+          label: "Dose 1",
           data: dors1,
           backgroundColor: ["rgba(54, 162, 235, 0.2)"],
           borderColor: ["rgba(54, 162, 235, 1)"],
           borderWidth: 1,
         },
         {
-          label: utf8.decode(utf8.encode("เข็มที่ 2")),
+          label: "Dose 2",
           data: dors2,
           backgroundColor: ["rgba(255, 206, 86, 0.2)"],
           borderColor: ["rgba(255, 206, 86, 1)"],
@@ -226,6 +229,9 @@ chart_vaccination = async (message) => {
         y: {
           beginAtZero: true,
         },
+      },
+      layout: {
+        padding: 40,
       },
       plugins: {
         legend: {

@@ -6,7 +6,7 @@ var n = d.toJSON();
 
 const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+};
 
 exports.embeds_play = (obj) => {
   // console.log(obj)
@@ -78,12 +78,13 @@ exports.embeds_covid = (obj) => {
     title: "🇹🇭 สถานการณ์ในประเทศไทย 🇹🇭",
     color: 16711680,
     footer: {
-      "icon_url": "https://yt3.ggpht.com/ytc/AKedOLQNaerSIv-ZT47edbqfJzVwPV4SxTwo7rZDRjIbV3s",
-      text: `${(new Date(obj.Date*1000)).toLocaleDateString('th-TH', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })} • ${(new Date(obj.Date*1000)).toLocaleTimeString('th-TH')}`
+      icon_url:
+        "https://yt3.ggpht.com/ytc/AKedOLQNaerSIv-ZT47edbqfJzVwPV4SxTwo7rZDRjIbV3s",
+      text: `${new Date(obj.Date * 1000).toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })} • ${new Date(obj.Date * 1000).toLocaleTimeString("th-TH")}`,
     },
     fields: [
       {
@@ -405,7 +406,7 @@ exports.embeds_user_online = (obj) => {
     embed.fields.push({
       name: index + 1 + ". " + obj.members[index].username,
       value: member_status,
-      inline: true
+      inline: true,
     });
   }
   return {
@@ -515,6 +516,18 @@ exports.embeds_help = () => {
         value: "ดู events ใน clubhouse : *ch events",
       },
       {
+        name: "*news",
+        value: "รายการข่าวจาก Sanook.com : *news",
+      },
+      {
+        name: "*what",
+        value: "ดู Player List : *what",
+      },
+      {
+        name: "*whatstop",
+        value: "หยุด Interval : *whatstop",
+      },
+      {
         name: "*botv",
         value: "ดู version ของ bot",
       },
@@ -556,7 +569,7 @@ exports.embeds_clubhouse = (obj) => {
 };
 
 exports.embeds_clubhouse_comming = (obj) => {
-  console.log(obj)
+  console.log(obj);
   const embed = {
     title: "Clubhouse Comming Events",
     thumbnail: {
@@ -567,14 +580,17 @@ exports.embeds_clubhouse_comming = (obj) => {
     fields: [],
   };
   for (let index = 0; index < 5; index++) {
-      embed.fields.push({
-        name: `Name : ${obj.events[index].name}`,
-        value: `
-        Description : ${obj.events[index].description.replace(/^(.{50}[^\s]*).*/, "$1")}
+    embed.fields.push({
+      name: `Name : ${obj.events[index].name}`,
+      value: `
+        Description : ${obj.events[index].description.replace(
+          /^(.{50}[^\s]*).*/,
+          "$1"
+        )}
 TimeStart : ${new Date(obj.events[index].time_start).toLocaleString("th-TH")}
 [link](${obj.events[index].url})
 ---------------------------------------------`,
-      });
+    });
   }
   return { embed };
 };
@@ -626,7 +642,6 @@ exports.embeds_moive = (obj, type) => {
   };
 };
 
-
 exports.embeds_visut = (obj) => {
   const embed = {
     title: "Visut News",
@@ -639,6 +654,49 @@ exports.embeds_visut = (obj) => {
     //   "text": "UpdateDate :" + obj.UpdateDate
     // },
     fields: obj,
+  };
+  return {
+    embed,
+  };
+};
+
+exports.embeds_news = (obj) => {
+  const embed = {
+    title: "Sanook News",
+    color: 16711680,
+    thumbnail: {
+      url: "https://yt3.ggpht.com/ytc/AKedOLQNaerSIv-ZT47edbqfJzVwPV4SxTwo7rZDRjIbV3s=s900-c-k-c0x00ffffff-no-rj",
+    },
+    "image": {
+      "url": obj.thumbnail.replace("//","https://")
+    },
+    fields: [
+      {
+        name: obj.title,
+        value: obj.description+` [ดูเพิ่มเติม](https://www.sanook.com/news/${obj.id})`,
+      },
+    ],
+    "footer": {
+      "icon_url": "https://yt3.ggpht.com/ytc/AKedOLQNaerSIv-ZT47edbqfJzVwPV4SxTwo7rZDRjIbV3s=s900-c-k-c0x00ffffff-no-rj",
+      "text": `${obj.createdAt} • ${obj.createdAtdatetime}`
+    },
+  };
+  return {
+    embed,
+  };
+};
+
+exports.embeds_what= (obj,length) => {
+  const embed = {
+    color: 16590970,
+    timestamp: n,
+    "thumbnail": {
+      "url": "https://media.discordapp.net/attachments/800049668797104188/867445862287147038/download_4.png"
+    },
+    author: {
+      name: `What City Player List : ${length}/500`,
+    },
+    fields: obj
   };
   return {
     embed,

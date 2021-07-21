@@ -5,7 +5,6 @@ const ytdl = require("ytdl-core");
 const axios = require("axios");
 const QRCode = require("qrcode");
 
-
 var fs = require("fs");
 const client = new Discord.Client();
 
@@ -94,65 +93,9 @@ client.once("disconnect", () => {
 
 var musicList = [];
 
+var whatInterval = false;
+
 client.on("message", async (message) => {
-  // jsonLog.push(message.content)
-  // console.log(jsonLog);
-
-  //     let default_time = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"});
-  //     let now = new Date(default_time)
-  //     let now2 = Date.now();
-  //     cotent_text = `{
-  //     "time":"${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}",
-  //     "time_unix":${now2},
-  //     "server_name":"${message.guild.name}",
-  //     "server_id":${message.guild.id},
-  //     "channel_name":"${message.channel.name}",
-  //     "channel_id":${message.channel.id},
-  //     "author_username":"${message.author.username}",
-  //     "author_id":${message.author.id},
-  //     "content":"${message.content}"
-  // },\n`
-  //     await fs.appendFile('log.txt', cotent_text, function (err) {
-  //         if (err) throw err;
-  //         console.log('Saved!');
-  //     });
-
-  //[${message.guild.name}][${message.channel.name}][${message.author.username}] ${JSON.stringify(message.content)}\n`, function (err) {
-  // message.guild.fetchAuditLogs()
-  //   .then(audit => console.log(audit.entries.first()))
-  //   .catch(console.error);
-  // var widget_enabled;
-  // await message.guild.fetchWidget().then(function (widget) {
-  //         widget_enabled = widget.enabled
-  //     })
-  //     .catch(console.error);
-
-  // console.log(widget_enabled)
-
-  // await message.guild.edit({
-  //     name: message.content,
-  //   })
-  //     .then(updated => console.log(`New guild name ${updated} in region`))
-  //     .catch(console.error);
-  // await console.log(queue.get(message.guild.id))
-  // let default_time = new Date().toLocaleString("en-US", {
-  //   timeZone: "Asia/Bangkok",
-  // });
-  // let now = new Date(default_time);
-
-  // await fs.appendFile(
-  //   "log.txt",
-  //   `[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}][${now.getDate()}/${
-  //     now.getMonth() + 1
-  //   }/${now.getFullYear()}][${message.guild.name}][${message.channel.name}][${
-  //     message.author.username
-  //   }] ${JSON.stringify(message.content)}\n`,
-  //   function (err) {
-  //     if (err) throw err;
-  //     console.log("Saved!");
-  //   }
-  // );
-
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
@@ -164,6 +107,14 @@ client.on("message", async (message) => {
   } else if (message.content.startsWith(`${prefix}skip`)) {
     skip(message, serverQueue);
     return;
+  } else if (message.content.startsWith(`${prefix}whatstop`)) {
+    whatInterval = false;
+    message.fetch(message.id).then((data)=>{
+      console.log(data.delete())
+    })
+    message.channel.send(`whatInterval : ${whatInterval}`).then(msg => {
+      msg.delete()
+    })
   } else if (message.content.startsWith(`${prefix}stop`)) {
     stop(message, serverQueue);
     return;
@@ -172,8 +123,41 @@ client.on("message", async (message) => {
   } else if (message.content.startsWith(`${prefix}help`)) {
     message.channel.send(modules_embeds.embeds_help());
   } else if (message.content.startsWith(`${prefix}covid`)) {
-    modules.covid(message)
+    modules.covid(message);
     // modules.chart_vaccination(message)
+  } else if (message.content.startsWith(`${prefix}what`)) {
+    message.fetch(message.id).then((data)=>{
+      console.log(data.delete())
+    })
+    axios.get("http://103.131.203.81:30120/players.json").then((res) => {
+      whatInterval = true
+      let data = res.data.slice(0,30).map((item) => ({
+        name: item.name,
+        value: `${item.ping >= 100 ? "🔴" : item.ping >= 60 ? "🟡" : "🟢"} ${
+          item.ping
+        } ms`,
+        inline: true,
+      }));
+      message.channel.send(modules_embeds.embeds_what(data,res.data.length)).then((msg) => {
+        var myVar = setInterval(() => {
+          if(!whatInterval){
+            msg.delete()
+            clearInterval(myVar);
+            
+          }
+          axios.get("http://103.131.203.81:30120/players.json").then((res) => {
+            let data2 = res.data.slice(0,30).map((item) => ({
+              name: item.name,
+              value: `${
+                item.ping >= 100 ? "🔴" : item.ping >= 60 ? "🟡" : "🟢"
+              } ${item.ping} ms`,
+              inline: true,
+            }));
+            msg.edit(modules_embeds.embeds_what(data2,res.data.length));
+          });
+        }, 5000);
+      });
+    });
   } else if (message.content.startsWith(`${prefix}crypto`)) {
     let baseUrl = "https://api.bitkub.com";
     axios
@@ -211,8 +195,18 @@ client.on("message", async (message) => {
   } else if (message.content.startsWith(`${prefix}botv`)) {
     message.reply("Bot version 1.2.9// Last Update 21/07/2021");
   } else if (message.content.startsWith(`${prefix}visut`)) {
-    modules.visut(message)
-  }else if (message.content.match(/(\*g) (.*?) (.*)/gm)) {
+    modules.visut(message);
+  } else if (message.content.startsWith(`${prefix}news`)) {
+    axios
+      .get(
+        "https://graph.sanook.com/?operationName=getArchiveEntries&variables=%7B%22oppaChannel%22%3A%22news%22%2C%22oppaCategorySlugs%22%3A%5B%5D%2C%22channels%22%3A%5B%22news%22%5D%2C%22notInCategoryIds%22%3A%5B%7B%22channel%22%3A%22news%22%2C%22ids%22%3A%5B1681%2C6050%2C6051%2C6052%2C6053%2C6054%2C6055%2C6510%2C6506%2C6502%5D%7D%5D%2C%22orderBy%22%3A%7B%22field%22%3A%22CREATED_AT%22%2C%22direction%22%3A%22DESC%22%7D%2C%22first%22%3A20%2C%22offset%22%3A0%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22f754ffc68eb4683990679d0154c39cb90b63d628%22%7D%7D"
+      )
+      .then((res) => {
+        res.data.data.entries.edges.slice(0, 5).map((item) => {
+          message.channel.send(modules_embeds.embeds_news(item.node));
+        });
+      });
+  } else if (message.content.match(/(\*g) (.*?) (.*)/gm)) {
     let re = /(\*g) (.*?) (.*)/gm;
     let command = message.content.replace(re, "$1");
     let code = message.content.replace(re, "$2");
@@ -274,12 +268,11 @@ client.on("message", async (message) => {
           );
         });
     }
-  }  else if (message.content.match(/(\*chart)/g)) {
+  } else if (message.content.match(/(\*chart)/g)) {
     let re = /(\*chart)/g;
     let content = message.content.replace(re, "$2");
-    modules.chart(message)
-   
-  }else if (message.content.match(/(\*urls) (.*)/g)) {
+    modules.chart(message);
+  } else if (message.content.match(/(\*urls) (.*)/g)) {
     let re = /(\*urls) (.*)/g;
     let content = message.content.replace(re, "$2");
     var data = "url=" + encodeURIComponent(content);
@@ -323,7 +316,8 @@ client.on("message", async (message) => {
     let content = message.content.replace(re, "$2");
     modules.twitter(content).then((data) => {
       const $ = cheerio.load(data);
-      const result = Array.from(
+      const result =
+        Array.from(
           $(
             "#tab-day > div > table.table.table-hover.text-left.clickable.ranking.top.mb-0 > tbody > tr"
           )
@@ -333,12 +327,13 @@ client.on("message", async (message) => {
           tweets: $(element).find("td:nth-child(3)").html(),
           record: $(element).find("td:nth-child(4)").html(),
         })) || [];
-        message.channel.send(modules_embeds.embeds_twitter(result));
-    })
+      message.channel.send(modules_embeds.embeds_twitter(result));
+    });
   } else if (message.content.match(/(\*twitter)/g)) {
     modules.twitter("day").then((data) => {
       const $ = cheerio.load(data);
-      const result = Array.from(
+      const result =
+        Array.from(
           $(
             "#tab-day > div > table.table.table-hover.text-left.clickable.ranking.top.mb-0 > tbody > tr"
           )
@@ -348,8 +343,8 @@ client.on("message", async (message) => {
           tweets: $(element).find("td:nth-child(3)").html(),
           record: $(element).find("td:nth-child(4)").html(),
         })) || [];
-        message.channel.send(modules_embeds.embeds_twitter(result));
-    })
+      message.channel.send(modules_embeds.embeds_twitter(result));
+    });
   } else if (message.content.match(/(\*qr) (.*)/g)) {
     let re = /(\*qr) (.*)/g;
     let content = message.content.replace(re, "$2");
@@ -486,7 +481,11 @@ client.on("message", async (message) => {
       let numberRandom = Math.floor(Math.random() * 3);
       message.reply(word[numberRandom]);
     } else {
-      let word = ["มึงเป็นควยไร", "ไอหน้าหีอย่าเสือก", "ไอเหี้ยนี่ขี้เสือกจังวะ"];
+      let word = [
+        "มึงเป็นควยไร",
+        "ไอหน้าหีอย่าเสือก",
+        "ไอเหี้ยนี่ขี้เสือกจังวะ",
+      ];
       let numberRandom = Math.floor(Math.random() * 3);
       message.reply(word[numberRandom]);
     }
