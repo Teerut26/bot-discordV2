@@ -94,9 +94,18 @@ client.once("disconnect", () => {
 var musicList = [];
 
 var whatInterval = false;
+let backlist = [];
 
 client.on("message", async (message) => {
   if (message.author.bot) return;
+  if (backlist.length != 0) {
+    if (backlist.filter((item) => item.id == message.author.id).length !== 0) {
+      message.fetch(message.id).then((data) => {
+        data.delete();
+      });
+    }
+  }
+
   if (!message.content.startsWith(prefix)) return;
 
   const serverQueue = queue.get(message.guild.id);
@@ -109,12 +118,56 @@ client.on("message", async (message) => {
     return;
   } else if (message.content.startsWith(`${prefix}whatstop`)) {
     whatInterval = false;
-    message.fetch(message.id).then((data)=>{
-      console.log(data.delete())
-    })
-    message.channel.send(`whatInterval : ${whatInterval}`).then(msg => {
-      msg.delete()
-    })
+    message.fetch(message.id).then((data) => {
+      console.log(data.delete());
+    });
+    message.channel.send(`whatInterval : ${whatInterval}`).then((msg) => {
+      msg.delete();
+    });
+  } else if (message.content.startsWith(`${prefix}setbacklist`)) {
+    if (message.author.id == "403504958273486851") {
+      let content = message.content.replace("*setbacklist ", "");
+      let len = backlist.filter((item) => item.id == content).length;
+      if (len == 0) {
+        client.users.fetch(content).then((data) => {
+          backlist.push({
+            username: data.username,
+            id: data.id,
+          });
+          message.fetch(message.id).then((data) => data.delete());
+          message.channel
+            .send(`${data.username} added to backlist :white_check_mark: `)
+            .then((m) => setTimeout(() => m.delete(), 5000));
+        });
+      } else {
+        message.fetch(message.id).then((data) => data.delete());
+        message.channel
+          .send("``มี Black List อยู่แล้ว``")
+          .then((m) => setTimeout(() => m.delete(), 5000));
+      }
+    }
+  } else if (message.content.startsWith(`${prefix}removebacklist`)) {
+    if (message.author.id == "403504958273486851") {
+      let content = message.content.replace("*removebacklist ", "");
+      let len = backlist.filter((item) => item.id == content).length;
+      backlist = backlist.filter((item) => item.id != content);
+    }
+  } else if (message.content.startsWith(`${prefix}backlist`)) {
+    message.fetch(message.id).then((data) => data.delete());
+    if (backlist.length !== 0) {
+      message.channel.send(
+        modules_embeds.embeds_backlist(
+          backlist.map((item, i) => ({
+            name: item.id,
+            value: `${item.username}`,
+          }))
+        )
+      );
+    } else {
+      message.channel
+        .send("``ไม่มี Black List``")
+        .then((m) => setTimeout(() => m.delete(), 5000));
+    }
   } else if (message.content.startsWith(`${prefix}stop`)) {
     stop(message, serverQueue);
     return;
@@ -126,37 +179,40 @@ client.on("message", async (message) => {
     modules.covid(message);
     // modules.chart_vaccination(message)
   } else if (message.content.startsWith(`${prefix}what`)) {
-    message.fetch(message.id).then((data)=>{
-      console.log(data.delete())
-    })
+    message.fetch(message.id).then((data) => {
+      console.log(data.delete());
+    });
     axios.get("http://103.131.203.81:30120/players.json").then((res) => {
-      whatInterval = true
-      let data = res.data.slice(0,30).map((item) => ({
+      whatInterval = true;
+      let data = res.data.slice(0, 30).map((item) => ({
         name: item.name,
         value: `${item.ping >= 100 ? "🔴" : item.ping >= 60 ? "🟡" : "🟢"} ${
           item.ping
         } ms`,
         inline: true,
       }));
-      message.channel.send(modules_embeds.embeds_what(data,res.data.length)).then((msg) => {
-        var myVar = setInterval(() => {
-          if(!whatInterval){
-            msg.delete()
-            clearInterval(myVar);
-            
-          }
-          axios.get("http://103.131.203.81:30120/players.json").then((res) => {
-            let data2 = res.data.slice(0,30).map((item) => ({
-              name: item.name,
-              value: `${
-                item.ping >= 100 ? "🔴" : item.ping >= 60 ? "🟡" : "🟢"
-              } ${item.ping} ms`,
-              inline: true,
-            }));
-            msg.edit(modules_embeds.embeds_what(data2,res.data.length));
-          });
-        }, 5000);
-      });
+      message.channel
+        .send(modules_embeds.embeds_what(data, res.data.length))
+        .then((msg) => {
+          var myVar = setInterval(() => {
+            if (!whatInterval) {
+              msg.delete();
+              clearInterval(myVar);
+            }
+            axios
+              .get("http://103.131.203.81:30120/players.json")
+              .then((res) => {
+                let data2 = res.data.slice(0, 30).map((item) => ({
+                  name: item.name,
+                  value: `${
+                    item.ping >= 100 ? "🔴" : item.ping >= 60 ? "🟡" : "🟢"
+                  } ${item.ping} ms`,
+                  inline: true,
+                }));
+                msg.edit(modules_embeds.embeds_what(data2, res.data.length));
+              });
+          }, 5000);
+        });
     });
   } else if (message.content.startsWith(`${prefix}crypto`)) {
     let baseUrl = "https://api.bitkub.com";
@@ -193,7 +249,7 @@ client.on("message", async (message) => {
       message.channel.send("ต้องเปิด widget ของ server นี้ก่อน");
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
-    message.reply("Bot version 1.2.9// Last Update 21/07/2021");
+    message.reply("``Bot version 1.3.0// Last Update 22/07/2021``");
   } else if (message.content.startsWith(`${prefix}visut`)) {
     modules.visut(message);
   } else if (message.content.startsWith(`${prefix}news`)) {

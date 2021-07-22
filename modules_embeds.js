@@ -528,6 +528,18 @@ exports.embeds_help = () => {
         value: "หยุด Interval : *whatstop",
       },
       {
+        name: "*setbacklist",
+        value: "Block การพิมพ์ : *setbacklist [id]",
+      },
+      {
+        name: "*removebacklist",
+        value: "ยกเลิกการ Block : *removebacklist [id]",
+      },
+      {
+        name: "*backlist",
+        value: "ดูว่าใครอู่ใน backlist : * ",
+      },
+      {
         name: "*botv",
         value: "ดู version ของ bot",
       },
@@ -695,6 +707,20 @@ exports.embeds_what= (obj,length) => {
     },
     author: {
       name: `What City Player List : ${length}/500`,
+    },
+    fields: obj
+  };
+  return {
+    embed,
+  };
+};
+
+exports.embeds_backlist= (obj) => {
+  const embed = {
+    color: 16590970,
+    timestamp: n,
+    author: {
+      name: `User Black List`,
     },
     fields: obj
   };
