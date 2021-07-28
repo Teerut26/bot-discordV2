@@ -44,6 +44,27 @@ async function getVideoLink(keyWord) {
   }
 }
 
+const sendWebHook = async (body) => {
+  var axios = require("axios");
+  let players = await axios.get("http://147.50.253.175:30120/players.json");
+  var data = JSON.stringify({
+    value1: players.data.length,
+    value2: JSON.stringify(players.data),
+    value3: new Date().toJSON(),
+  });
+
+  var config = {
+    method: "post",
+    url: "https://maker.ifttt.com/trigger/user_online/with/key/zDfY7onjwQAY2aZC4z8rK",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+  let res = await axios(config)
+  console.log(res.data)
+};
+
 // console.log(client.uptime);
 
 client.on("ready", () => {
@@ -54,6 +75,12 @@ client.on("ready", () => {
   client.user.setActivity("SynthX | *help", {
     type: "LISTENING",
   });
+
+  // sendWebHook()
+  // setInterval(() => {
+  //   sendWebHook()
+  // }, 60000 * 5);
+
   // client.user.setUsername('SynthX')
   //     .then(user => console.log(`My new username is ${user.username}`))
   //     .catch(console.error);
@@ -168,7 +195,11 @@ client.on("message", async (message) => {
         .send("``ไม่มี Black List``")
         .then((m) => setTimeout(() => m.delete(), 5000));
     }
-  } else if (message.content.startsWith(`${prefix}stop`)) {
+  } else if (message.content.startsWith(`${prefix}spotify`)) {
+    let re = /(\*spotify) (.*)/g;
+    let content = message.content.match(/(\*spotify) (.*)/g) ? message.content.replace(re, "$2") : "global"
+    modules.spotify_chart(message,content)
+  }else if (message.content.startsWith(`${prefix}stop`)) {
     stop(message, serverQueue);
     return;
   } else if (message.content.startsWith(`${prefix}musiclist`)) {
@@ -182,7 +213,7 @@ client.on("message", async (message) => {
     message.fetch(message.id).then((data) => {
       console.log(data.delete());
     });
-    axios.get("http://103.131.203.81:30120/players.json").then((res) => {
+    axios.get("http://147.50.253.175:30120/players.json").then((res) => {
       whatInterval = true;
       let data = res.data.slice(0, 30).map((item) => ({
         name: item.name,
@@ -200,7 +231,7 @@ client.on("message", async (message) => {
               clearInterval(myVar);
             }
             axios
-              .get("http://103.131.203.81:30120/players.json")
+              .get("http://147.50.253.175:30120/players.json")
               .then((res) => {
                 let data2 = res.data.slice(0, 30).map((item) => ({
                   name: item.name,
@@ -249,7 +280,7 @@ client.on("message", async (message) => {
       message.channel.send("ต้องเปิด widget ของ server นี้ก่อน");
     }
   } else if (message.content.startsWith(`${prefix}botv`)) {
-    message.reply("``Bot version 1.3.0// Last Update 22/07/2021``");
+    message.reply("``Bot version 1.3.1// Last Update 28/07/2021``");
   } else if (message.content.startsWith(`${prefix}visut`)) {
     modules.visut(message);
   } else if (message.content.startsWith(`${prefix}news`)) {

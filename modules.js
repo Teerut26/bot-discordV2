@@ -291,3 +291,27 @@ exports.visut = async (message) => {
   // console.log(obj)
   message.channel.send(modules_embeds.embeds_visut(obj));
 };
+
+exports.spotify_chart = async (message, content="global") => {
+  let res = await axios.get(
+    `https://spotifycharts.com/regional/${content}/daily/latest`
+  );
+  let data = await res.data;
+  const $ = await cheerio.load(data);
+  const result =
+    Array.from($("#content > div > div > div > span > table > tbody > tr")).map(
+      (element) => ({
+        index: $(element).find("td.chart-table-position").text(),
+        cover: $(element).find("td.chart-table-image > a > img").attr("src"),
+        title: $(element).find("td.chart-table-track > strong").text(),
+        artist: $(element)
+          .find("td.chart-table-track > span")
+          .text()
+          .replace("by ", "")
+          .split(", "),
+        streams: $(element).find("td.chart-table-streams").text(),
+        link: $(element).find("td.chart-table-image > a").attr("href"),
+      })
+    ) || [];
+ message.channel.send(modules_embeds.embeds_spotify_chart(result))
+};

@@ -536,6 +536,10 @@ exports.embeds_help = () => {
         value: "ยกเลิกการ Block : *removebacklist [id]",
       },
       {
+        name: "*spotify",
+        value: "ดู Spotify Chart : *spotify [th][en][jp][kr][..]",
+      },
+      {
         name: "*backlist",
         value: "ดูว่าใครอู่ใน backlist : * ",
       },
@@ -723,6 +727,23 @@ exports.embeds_backlist= (obj) => {
       name: `User Black List`,
     },
     fields: obj
+  };
+  return {
+    embed,
+  };
+};
+
+exports.embeds_spotify_chart = (obj) => {
+  const embed = {
+    color: 2020959,
+    timestamp: n,
+    "thumbnail": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Spotify_logo_with_text.svg/2560px-Spotify_logo_with_text.svg.png"
+    },
+    fields: obj.slice(0, 15).map((item)=>({
+      name:`${item.index}. ${item.title}`,
+      value:`${item.artist.join(',')} | ${item.streams} | [More](${item.link})`,
+    }))
   };
   return {
     embed,
